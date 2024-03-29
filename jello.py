@@ -7,4 +7,4 @@ pizza parkour dance
 #blawb
 
 
-print("One Piece is peak fiction")
+print("one piece is peak fiction")
