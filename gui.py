@@ -11,7 +11,6 @@ import review
 OUTPUT_PATH = Path(__file__).parent
 ASSETS_PATH = OUTPUT_PATH / 'assets/login'
 
-
 def relative_to_assets(path: str) -> Path:
     return ASSETS_PATH / Path(path)
 
@@ -53,7 +52,7 @@ canvas.create_text(
     264.0,
     161.0,
     anchor="nw",
-    text="ReView Login",
+    text="Login",
     fill="#FFFFFF",
     font=("InriaSans Regular", 96 * -1)
 )
@@ -77,7 +76,6 @@ entry_1.place(
     width=336.0,
     height=54.0
 )
-entry_1.insert(0,"Enter Username")
 
 entry_image_2 = PhotoImage(
     file=relative_to_assets("entry_2.png"))
@@ -98,7 +96,14 @@ entry_2.place(
     width=336.0,
     height=54.0
 )
-entry_2.insert(0,"Enter Password")
+
+canvas.create_rectangle(
+    1151.0,
+    663.0,
+    1387.0,
+    734.0,
+    fill="#556C4A",
+    outline="")
 
 button_image_1 = PhotoImage(
     file=relative_to_assets("button_1.png"))
@@ -124,6 +129,16 @@ canvas.create_text(
     fill="#FFFFFF",
     font=("InriaSans Regular", 36 * -1)
 )
+
+image_image_1 = PhotoImage(
+    file=relative_to_assets("image_1.png"))
+image_1 = canvas.create_image(
+    1269.0,
+    328.0,
+    image=image_image_1
+)
+entry_1.insert(0,"Enter Username")
+entry_2.insert(0,"Enter Password")
 
 def login():
     username = entry_1.get()
