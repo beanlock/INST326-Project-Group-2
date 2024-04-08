@@ -21,6 +21,7 @@ class Review():
         self.text = text
 
     def display_review(self):
+        #retrieve the movie title using the imdb ID and ia.get_movie function
         movietitle = ia.get_movie(self.movieID)["title"]
         print("Review of " + movietitle)
         print(maindb.users[self.ownerID].username + ": " + self.text)
@@ -31,17 +32,31 @@ class Review():
 
 class User():
     """
+    User: Handles user creation and actions, like leaving reviews, displaying reviews, etc.
+
+    Attributes:
+    userID(str): unique ID to identify users
+    username(str): unique username
+    reviews(dict): dictionary of reviews, reviewID is the key, and review object is the value
+    password(str): NYI
+    watchlist(dict): NYI
+    favorites(dict): NYI
+    friends(dict): NYI
+    reviewcount(int): # of reviews made by the user
+    
     """
     def __init__(self, username, password):
-        self.userID = generate_userID(maindb)
-        self.username = username
-        self.password = password
-        self.watchlist = {}
-        self.favorites = {}
-        self.reviews = {}
-        self.friends = {}
-        self.reviewcount = 0
-        maindb.users[self.userID] = self
+        if not maindb.is_username_used(username):
+            #make sure username is not already taken 
+            self.userID = generate_userID(maindb)
+            self.username = username
+            self.password = password
+            self.reviews = {}
+            self.watchlist = {}
+            self.favorites = {}
+            self.friends = {}
+            self.reviewcount = 0
+            maindb.users[self.userID] = self
 
     def create_review(self, movieID, rating, text):
         reviewID = str(self.reviewcount) + self.userID
@@ -57,10 +72,14 @@ class User():
 class UserDB():
     def __init__(self):
         self.used_ids = set()
+        self.used_usernames = set()
         self.users = {}
 
     def is_id_used(self, userID):
         return userID in self.used_ids
+    
+    def is_username_used(self, username):
+        return username in self.used_usernames
     
     def add_user_id(self, userID):
         self.used_ids.add(userID)
