@@ -1,6 +1,6 @@
 from imdb import Cinemagoer
 from imdb import helpers
-import tkinter as tk
+
 import urllib as ul
 
 ia = Cinemagoer()
