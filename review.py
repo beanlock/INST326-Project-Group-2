@@ -21,6 +21,9 @@ class Review():
         self.text = text
 
     def display_review(self):
+        """
+        Prints the review with the the movie title the usseraname of the reviewer, the text of the review and the number of stars.
+        """
         #retrieve the movie title using the imdb ID and ia.get_movie function
         movietitle = ia.get_movie(self.movieID)["title"]
         print("Review of " + movietitle)
@@ -59,6 +62,14 @@ class User():
             maindb.users[self.userID] = self
 
     def create_review(self, movieID, rating, text):
+        """
+        Creates a new review and adds it to the sers list of reviews.
+
+        Args:
+        movie ID (str): The IMDB ID of the moving that is getting reviewed 
+        rating (int): The users rating of the movie
+        text (str): The users typed out review of the movie
+        """
         reviewID = str(self.reviewcount) + self.userID
         review = Review(reviewID, self.userID, movieID, rating, text)
         self.reviews[reviewID] = review
@@ -70,24 +81,50 @@ class User():
 
 #database of all users, keeps track of user objects and IDs
 class UserDB():
+    """
+    Contains the database of usees with thei ID's and usernames that are all different in order to avoid confusion
+
+    Attributes: 
+    used_ids (set): A set of all user ID's to prevent repatition 
+    used_usernames (set): A set of used usernames to prevent repatition
+    users (dict): A dictinoary of user objects, with the key bing userID
+    """
     def __init__(self):
         self.used_ids = set()
         self.used_usernames = set()
         self.users = {}
 
     def is_id_used(self, userID):
+        """
+        Checks if userID is already used
+        """
         return userID in self.used_ids
     
     def is_username_used(self, username):
+        """
+        Checks is username already used
+        """
         return username in self.used_usernames
     
     def add_user_id(self, userID):
+        """
+        Marks userID as used
+        """
         self.used_ids.add(userID)
 
 maindb = UserDB()
 
 #makes sure user id is unique
 def generate_userID(db):
+    """
+    Creates unique userID for new user
+
+    Args:
+    db (UserDB): The User database instance to check for existing ID's
+
+    Returns:
+    str: A unuque userID
+    """
     while True:
         user_id = str(random.randint(0, 9999))
         if not db.is_id_used(user_id):
@@ -97,6 +134,9 @@ def generate_userID(db):
 ia = Cinemagoer()
 
 def main():
+    """
+    A example of creating a user, searching for a movie and creating a review 
+    """
     testuser = User("beanlock", "brung")
 
     
