@@ -3,7 +3,7 @@ from pathlib import Path
 
 # from tkinter import *
 # Explicit imports to satisfy Flake8
-from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage
+from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage, Label
 
 import review
 
@@ -77,6 +77,7 @@ entry_1.place(
     width=336.0,
     height=54.0
 )
+entry_1.insert(0,"Enter Username")
 
 entry_image_2 = PhotoImage(
     file=relative_to_assets("entry_2.png"))
@@ -97,6 +98,7 @@ entry_2.place(
     width=336.0,
     height=54.0
 )
+entry_2.insert(0,"Enter Password")
 
 button_image_1 = PhotoImage(
     file=relative_to_assets("button_1.png"))
@@ -104,7 +106,7 @@ button_1 = Button(
     image=button_image_1,
     borderwidth=0,
     highlightthickness=0,
-    command=lambda: print("button_1 clicked"),
+    command=lambda: login(),
     relief="flat"
 )
 button_1.place(
@@ -122,5 +124,15 @@ canvas.create_text(
     fill="#FFFFFF",
     font=("InriaSans Regular", 36 * -1)
 )
-window.resizable(False, False)
+
+def login():
+    username = entry_1.get()
+    password = entry_2.get()
+
+    print("Username: " + username + "\nPassword: " + password)
+
+    label = Label(window, text = username + password)
+    label.pack()
+
+window.resizable(True, True)
 window.mainloop()
