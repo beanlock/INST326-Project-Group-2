@@ -86,7 +86,7 @@ entry_2 = Entry(
     bd=0,
     bg="#D9D9D9",
     fg="#000716",
-    highlightthickness=0
+    highlightthickness=0,
 )
 entry_2.place(
     x=1213.0,
@@ -206,7 +206,7 @@ def on_password_entry_click(event):
     '''
     if entry_2.get() == "Enter Password":
         entry_2.delete(0, "end")
-        entry_2.config(fg = 'black')
+        entry_2.config(fg = 'black', show="*")
 
 def on_password_entry_focusout(event):
     '''
@@ -217,7 +217,7 @@ def on_password_entry_focusout(event):
     '''
     if not entry_2.get():
         entry_2.insert(0, "Enter Password")
-        entry_2.config(fg = 'black')
+        entry_2.config(fg = 'black', show="")
 
 entry_2.bind("<FocusIn>", on_password_entry_click)
 entry_2.bind("<FocusOut>", on_password_entry_focusout)
