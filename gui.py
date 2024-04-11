@@ -129,9 +129,6 @@ button_2.place(
     height=51.0
 )
 
-
-
-
 '''
 Text doesn't correctly appear over the buttons
 '''
@@ -165,10 +162,13 @@ image_1 = canvas.create_image(
 )
 
 
+
 entry_1.insert(0,"Enter Username")
 entry_2.insert(0,"Enter Password")
 
 def login():
+
+
     username = entry_1.get()
     password = entry_2.get()
 
@@ -176,6 +176,56 @@ def login():
 
     label = Label(window, text = username + password)
     label.pack()
+
+def on_password_entry_click(event):
+    '''
+    Password Focus: Removes the enter password text when the user clicks on the box
+
+    Parameters: 
+    event: The event object representing the FocusIn event.
+    '''
+    if entry_2.get() == "Enter Password":
+        entry_2.delete(0, "end")
+        entry_2.config(fg = 'black')
+
+def on_password_entry_focusout(event):
+    '''
+    Password Focus out: Reinserts the Enter Password text when the user clicks out of the password textbox
+
+    Parameters: 
+    event: The event object representing the FocusOut event.
+    '''
+    if not entry_2.get():
+        entry_2.insert(0, "Enter Password")
+        entry_2.config(fg = 'black')
+
+entry_2.bind("<FocusIn>", on_password_entry_click)
+entry_2.bind("<FocusOut>", on_password_entry_focusout)
+
+def on_username_entry_click(event):
+    '''
+    Username Focus in: Removes the enter username text when the user clicks on the box
+
+    Parameters: 
+    event: The event object representing the FocusIn event.
+    '''
+    if entry_1.get() == "Enter Username":
+        entry_1.delete(0, "end")
+        entry_1.config(fg = 'black')
+
+def on_username_entry_focusout(event):
+    '''
+    Username Focus out: Reinserts the Enter Username text when the user clicks out of the username textbox
+
+    Parameters: 
+    event: The event object representing the FocusOut event.
+    '''
+    if not entry_1.get():
+        entry_1.insert(0, "Enter Username")
+        entry_1.config(fg = 'black')
+
+entry_1.bind("<FocusIn>", on_username_entry_click)
+entry_1.bind("<FocusOut>", on_username_entry_focusout)
 
 window.resizable(True, True)
 window.mainloop()
