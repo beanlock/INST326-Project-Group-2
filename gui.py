@@ -3,7 +3,7 @@ from pathlib import Path
 
 from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage, Label
 
-import review
+from review import *
 
 
 OUTPUT_PATH = Path(__file__).parent
@@ -48,7 +48,7 @@ canvas.create_rectangle(
 
 canvas.create_text(
     108.0,
-    0.0,
+    15,
     anchor="nw",
     text="Login",
     fill="#FFFFFF",
@@ -95,32 +95,39 @@ entry_2.place(
     height=54.0
 )
 
-button_image_1 = PhotoImage(
-    file=relative_to_assets("button_1.png"))
-button_1 = Button(
-    image=button_image_1,
-    borderwidth=0,
+button_1 = Button (
+    bg="#586c4c",
+    fg="#FFFFFF",
+    text = "Login",
+    font=("Koulen Regular", 30 * -1),
+    activebackground="#586c4c",
+    activeforeground="#586c4c",
+    relief="flat",
     highlightthickness=0,
-    command=lambda: print("button_1 clicked"),
-    relief="flat"
-)
-button_1.place(
-    x=1280.0,
-    y=723.0,
-    width=201.0,
-    height=51.0
+    borderwidth=0.5,
+    command=lambda: login()
 )
 
-button_image_2 = PhotoImage(
-    file=relative_to_assets("button_2.png"))
-button_2 = Button(
-    image=button_image_2,
-    borderwidth=0,
-    highlightthickness=0,
-    command=lambda: print("button_2 clicked"),
-    relief="flat"
+button_1.place (
+    x = 1280.0,
+    y = 723.0,
+    width = 201.0,
+    height = 51.0
 )
-button_2.place(
+
+button_2 = Button (
+    bg="#586c4c",
+    fg="#FFFFFF",
+    text = "Sign Up",
+    font=("Koulen Regular", 30 * -1),
+    activebackground="#586c4c",
+    activeforeground="#586c4c",
+    relief="flat",
+    highlightthickness=0,
+    borderwidth=0.5
+)
+
+button_2.place (
     x=1280.0,
     y=792.0,
     width=201.0,
@@ -159,21 +166,36 @@ image_1 = canvas.create_image(
     image=image_image_1
 )
 
+success = PhotoImage(
+    file=relative_to_assets("success.png")) 
 
+failure = PhotoImage(
+    file=relative_to_assets("failure.png")) 
 
 entry_1.insert(0,"Enter Username")
 entry_2.insert(0,"Enter Password")
 
 def login():
 
-
     username = entry_1.get()
     password = entry_2.get()
 
     print("Username: " + username + "\nPassword: " + password)
 
-    label = Label(window, text = username + password)
-    label.pack()
+    if maindb.verify_user(username, password):
+        print("you did it woobsicle!!")
+        canvas.create_image(
+        1920/2,
+        1080/2,
+        image = success
+        )
+    else:
+        print(r"you suck :(")
+        canvas.create_image(
+        1920/2,
+        1080/2,
+        image = failure
+        )
 
 def on_password_entry_click(event):
     '''
@@ -224,6 +246,15 @@ def on_username_entry_focusout(event):
 
 entry_1.bind("<FocusIn>", on_username_entry_click)
 entry_1.bind("<FocusOut>", on_username_entry_focusout)
+
+
+def main():
+    testuser = User("beanlock", "brung")
+
+
+if __name__ == "__main__":
+    main()
+
 
 window.resizable(True, True)
 window.mainloop()

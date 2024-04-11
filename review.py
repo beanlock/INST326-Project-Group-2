@@ -111,6 +111,12 @@ class UserDB():
         Marks userID as used
         """
         self.used_ids.add(userID)
+    
+    def verify_user(self, username, password):
+        for user in self.users.values():
+            if user.username == username and user.password == password:
+                return True
+        return False
 
 maindb = UserDB()
 
