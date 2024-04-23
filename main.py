@@ -1,27 +1,8 @@
-import tkinter as tk
+from tkinter import Frame, Label
 
-def main_canvas():
-    root = tk.Tk()
-    root.title("Main Page")
-
-    frame = tk.Frame(
-        root, 
-        width=1920,
-        height = 1080
-        )
-
-    canvas = tk.Canvas(
-        frame,
-        bg='white',
-        width=1920,
-        height=1080
-        )
-    canvas.pack()
-
-    canvas.create_text(
-        1920/2,
-        1080/2,
-        text="Welcome to Main"
-    )
-
-    root.mainloop()
+class MainFrame(Frame):
+    def __init__(self, app_frames):
+        super().__init__(app_frames.master)
+        self.configure(bg='white')
+        self.label = Label(self, text="Welcome to the Main Application Screen", bg='white')
+        self.label.pack(expand=True)
