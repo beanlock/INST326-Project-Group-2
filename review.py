@@ -33,6 +33,9 @@ class Review():
     def __str__(self) -> str:
         return("Owner Id: " + self.ownerID + " Movie ID: " + self.movieID + " Rating: " + str(self.rating) + " Review Text: "+ self.text)
 
+
+
+
 class User():
     """
     User: Handles user creation and actions, like leaving reviews, displaying reviews, etc.
@@ -60,7 +63,7 @@ class User():
             self.friends = {}
             self.reviewcount = 0
             maindb.users[self.userID] = self
-
+            self.genre_preferences = {}
     def create_review(self, movieID, rating, text):
         """
         Creates a new review and adds it to the sers list of reviews.
@@ -75,9 +78,41 @@ class User():
         self.reviews[reviewID] = review
         self.reviewcount+= 1
 
+        if rating >= 7:
+            genres = ia.get_movie(movieID)["genres"]
+            for genre in genres:
+                if genre in self.genre_preferences:
+                    self.genre_preferences[genre] += 1
+                else:
+                    self.genre_preferences[genre] = 1
+
+    def favorite_genres(self):
+        sorted_genres = sorted(self.genre_preferences, key=self.genre_preferences.get, reverse=True)
+        return sorted_genres[:3]  #Returns top 3 genres
+    
+    def reviewed_movie_ids(self):
+        movieIDS = []
+        for review in self.reviews:
+            movieIDS.append(review.movieID)
+
     def display_all_reviews(self):
         for review in self.reviews.values():
             review.display_review()
+
+
+class RecommendationEngine:
+    def __init__(self, user, movies):
+        self.user = user
+        self.movies = movies
+
+    def recommend(self):
+        favorite_genres = self.user.favorite_genres()
+        recommended_movies = []
+        for movie in self.movies:
+            movie_genres = set(ia.get_movie(movie.movieID)["genres"])  
+            if movie_genres.intersection(favorite_genres) and movie.movieID not in self.user.reviewed_movie_ids():
+                recommended_movies.append(movie)
+        return recommended_movies
 
 #database of all users, keeps track of user objects and IDs
 class UserDB():
