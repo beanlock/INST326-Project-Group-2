@@ -6,6 +6,7 @@ from review import *
 class AppFrames:
     def __init__(self, master):
         self.master = master
+        self.master.state('zoomed')
         self.current_frame = None
         self.users = {"testudo":"inst"}
         self.switch_frame(login.LoginFrame)
