@@ -7,7 +7,7 @@ class AppFrames:
     def __init__(self, master):
         self.master = master
         self.current_frame = None
-        self.users = {"beanlock":"brung"}
+        self.users = {"testudo":"inst"}
         self.switch_frame(login.LoginFrame)
     
     def verify_user(self, username, password):
