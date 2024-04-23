@@ -105,17 +105,24 @@ class RecommendationEngine:
         self.user = user
 
     def recommend(self):
+        """
+        Create a list of 10 movies based on genres that are highly rated from a user.
+
+        Returns: 
+        recommended_movies(list): 10 movie titles of reccomended movies
+        (in the future this will probably return movie IDs instead of titles)
+        """
         favorite_genres = self.user.favorite_genres()
         for genre in favorite_genres:
             print(genre)
         recommended_movies = []
         topmovies = ia.get_top250_movies()
-        print(topmovies)
+        #print(topmovies)
         for movie in topmovies:
             movie_id = movie.movieID
-            print("movie id: " +  str(movie_id))
+            #print("movie id: " +  str(movie_id))
             movie_details = ia.get_movie(movie_id)
-            print("Movie details: " + str(movie_details))
+            #print("Movie details: " + str(movie_details))
             if any(genre in movie_details['genres'] for genre in favorite_genres):
                 recommended_movies.append(movie_details['title'])
                 print("Added "+  str(movie_details['title']) + " to the list") 
