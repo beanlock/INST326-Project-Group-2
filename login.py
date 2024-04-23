@@ -6,6 +6,7 @@ from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage, Label
 from review import *
 
 
+
 OUTPUT_PATH = Path(__file__).parent
 ASSETS_PATH = OUTPUT_PATH / 'assets/login'
 
@@ -53,6 +54,15 @@ canvas.create_text(
     text="Login",
     fill="#FFFFFF",
     font=("Koulen Regular", 128 * -1)
+)
+
+login_check = canvas.create_text(
+    1380.25,
+    520,
+    anchor="center",
+    text="",
+    fill="#FFFFFF",
+    font=("Koulen Regular", 30 * -1),
 )
 
 entry_image_1 = PhotoImage(
@@ -166,12 +176,6 @@ image_1 = canvas.create_image(
     image=image_image_1
 )
 
-success = PhotoImage(
-    file=relative_to_assets("success.png")) 
-
-failure = PhotoImage(
-    file=relative_to_assets("failure.png")) 
-
 entry_1.insert(0,"Enter Username")
 entry_2.insert(0,"Enter Password")
 
@@ -184,19 +188,15 @@ def login():
 
     if maindb.verify_user(username, password):
         print("you did it woobsicle!!")
-        canvas.create_image(
-        1920/2,
-        1080/2,
-        image = success
-        )
+
     else:
         print(r"you suck :(")
-        canvas.create_image(
-        1920/2,
-        1080/2,
-        image = failure
-        )
-
+        canvas.itemconfig(
+            login_check, 
+            text="Incorrect Username or Password",
+            fill="#ff292c"
+            )
+        
 def on_password_entry_click(event):
     '''
     Password Focus: Removes the enter password text when the user clicks on the box
