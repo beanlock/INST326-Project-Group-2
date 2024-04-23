@@ -101,18 +101,39 @@ class User():
 
 
 class RecommendationEngine:
-    def __init__(self, user, movies):
+    def __init__(self, user):
         self.user = user
-        self.movies = movies
 
     def recommend(self):
         favorite_genres = self.user.favorite_genres()
+        for genre in favorite_genres:
+            print(genre)
         recommended_movies = []
-        for movie in self.movies:
+        topmovies = ia.get_top250_movies()
+        print(topmovies)
+        for movie in topmovies:
+            movie_id = movie.movieID
+            print("movie id: " +  str(movie_id))
+            movie_details = ia.get_movie(movie_id)
+            print("Movie details: " + str(movie_details))
+            if any(genre in movie_details['genres'] for genre in favorite_genres):
+                recommended_movies.append(movie_details['title'])
+                print("Added "+  str(movie_details['title']) + " to the list") 
+            if(len(recommended_movies)>10):
+                break
+        print("tried to recommend")
+        print(recommended_movies)
+        return recommended_movies
+        
+        
+        
+
+        """for movie in self.movies:
             movie_genres = set(ia.get_movie(movie.movieID)["genres"])  
             if movie_genres.intersection(favorite_genres) and movie.movieID not in self.user.reviewed_movie_ids():
                 recommended_movies.append(movie)
         return recommended_movies
+        """
 
 #database of all users, keeps track of user objects and IDs
 class UserDB():
@@ -172,14 +193,15 @@ def generate_userID(db):
             db.add_user_id(user_id)
             return user_id
 
-ia = Cinemagoer()
+ia = Cinemagoer('http')
 
 def main():
     """
     A example of creating a user, searching for a movie and creating a review 
     """
     testuser = User("beanlock", "brung")
-
+    topmovies = ia.get_top250_indian_movies()
+    print(topmovies)
     
 
     movies = ia.search_movie("spiderverse")
@@ -190,7 +212,10 @@ def main():
     movieID = movie["imdbID"]
     testuser.create_review(movieID, 9, "this movie was really cool and good i liked it a lot")
     testuser.display_all_reviews()
-
+    testReccomender = RecommendationEngine(testuser)
+    reccomended_movies = testReccomender.recommend()
+    for movie in reccomended_movies:
+        print("Reccomended: " + str(movie))
     #testreview = Review("123", "0133093", 5, "wow this movie is really cool")
     #print(testreview)
     #testreview.display_review()
