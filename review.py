@@ -33,6 +33,9 @@ class Review():
     def __str__(self) -> str:
         return("Owner Id: " + self.ownerID + " Movie ID: " + self.movieID + " Rating: " + str(self.rating) + " Review Text: "+ self.text)
 
+
+
+
 class User():
     """
     User: Handles user creation and actions, like leaving reviews, displaying reviews, etc.
@@ -60,7 +63,7 @@ class User():
             self.friends = {}
             self.reviewcount = 0
             maindb.users[self.userID] = self
-
+            self.genre_preferences = {}
     def create_review(self, movieID, rating, text):
         """
         Creates a new review and adds it to the sers list of reviews.
@@ -75,9 +78,62 @@ class User():
         self.reviews[reviewID] = review
         self.reviewcount+= 1
 
+        if rating >= 7:
+            genres = ia.get_movie(movieID)["genres"]
+            for genre in genres:
+                if genre in self.genre_preferences:
+                    self.genre_preferences[genre] += 1
+                else:
+                    self.genre_preferences[genre] = 1
+
+    def favorite_genres(self):
+        sorted_genres = sorted(self.genre_preferences, key=self.genre_preferences.get, reverse=True)
+        return sorted_genres[:3]  #Returns top 3 genres
+    
+    def reviewed_movie_ids(self):
+        movieIDS = []
+        for review in self.reviews:
+            movieIDS.append(review.movieID)
+
     def display_all_reviews(self):
         for review in self.reviews.values():
             review.display_review()
+
+
+class RecommendationEngine:
+    def __init__(self, user):
+        self.user = user
+
+    def recommend(self):
+        favorite_genres = self.user.favorite_genres()
+        for genre in favorite_genres:
+            print(genre)
+        recommended_movies = []
+        topmovies = ia.get_top250_movies()
+        print(topmovies)
+        for movie in topmovies:
+            movie_id = movie.movieID
+            print("movie id: " +  str(movie_id))
+            movie_details = ia.get_movie(movie_id)
+            print("Movie details: " + str(movie_details))
+            if any(genre in movie_details['genres'] for genre in favorite_genres):
+                recommended_movies.append(movie_details['title'])
+                print("Added "+  str(movie_details['title']) + " to the list") 
+            if(len(recommended_movies)>10):
+                break
+        print("tried to recommend")
+        print(recommended_movies)
+        return recommended_movies
+        
+        
+        
+
+        """for movie in self.movies:
+            movie_genres = set(ia.get_movie(movie.movieID)["genres"])  
+            if movie_genres.intersection(favorite_genres) and movie.movieID not in self.user.reviewed_movie_ids():
+                recommended_movies.append(movie)
+        return recommended_movies
+        """
 
 #database of all users, keeps track of user objects and IDs
 class UserDB():
@@ -137,14 +193,15 @@ def generate_userID(db):
             db.add_user_id(user_id)
             return user_id
 
-ia = Cinemagoer()
+ia = Cinemagoer('http')
 
 def main():
     """
     A example of creating a user, searching for a movie and creating a review 
     """
     testuser = User("beanlock", "brung")
-
+    topmovies = ia.get_top250_indian_movies()
+    print(topmovies)
     
 
     movies = ia.search_movie("spiderverse")
@@ -155,7 +212,10 @@ def main():
     movieID = movie["imdbID"]
     testuser.create_review(movieID, 9, "this movie was really cool and good i liked it a lot")
     testuser.display_all_reviews()
-
+    testReccomender = RecommendationEngine(testuser)
+    reccomended_movies = testReccomender.recommend()
+    for movie in reccomended_movies:
+        print("Reccomended: " + str(movie))
     #testreview = Review("123", "0133093", 5, "wow this movie is really cool")
     #print(testreview)
     #testreview.display_review()
