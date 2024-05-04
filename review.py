@@ -180,6 +180,14 @@ class UserDB():
             if user.username == username and user.password == password:
                 return True
         return False
+    
+    def register_user(self, username, password):
+        if self.is_username_used(username):
+            return False
+        new_user = User(username, password)
+        self.users[new_user.userID] = new_user
+        self.used_usernames.add(username)
+        return True
 
 maindb = UserDB()
 

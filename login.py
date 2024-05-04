@@ -6,7 +6,10 @@ from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage, Label, Frame
 from review import *
 
 from frames import *
+
 from main import MainFrame
+
+from register import Register
 
 OUTPUT_PATH = Path(__file__).parent
 ASSETS_PATH = OUTPUT_PATH / 'assets/login'
@@ -141,7 +144,8 @@ class LoginFrame(Frame):
             activeforeground="#586c4c",
             relief="flat",
             highlightthickness=0,
-            borderwidth=0.5
+            borderwidth=0.5,
+            command=lambda: self.app_frames.switch_frame(Register)
         )
 
         self.button_2.place (

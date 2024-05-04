@@ -1,6 +1,7 @@
 from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage, Label
 import login
 import main
+import review
 from review import *
 
 class AppFrames:
@@ -8,7 +9,7 @@ class AppFrames:
         self.master = master
         self.master.state('zoomed')
         self.current_frame = None
-        self.users = {"testudo":"inst"}
+        self.users = UserDB()
         self.switch_frame(login.LoginFrame)
     
     def verify_user(self, username, password):
@@ -22,6 +23,11 @@ class AppFrames:
             fill='both',
             expand=True
         )
+    
+    def register(self, username, password):
+        success = self.users.register_user(username,password)
+        return success
+    
 
 if __name__ == "__main__":
     root = Tk()
