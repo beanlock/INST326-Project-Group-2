@@ -23,7 +23,7 @@ class Review():
 
     def display_review(self):
         """
-        Prints the review with the the movie title the usseraname of the reviewer, the text of the review and the number of stars.
+        Prints the review with the the movie title the useraname of the reviewer, the text of the review and the number of stars.
         """
         #retrieve the movie title using the imdb ID and ia.get_movie function
         movietitle = ia.get_movie(self.movieID)["title"]

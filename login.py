@@ -174,11 +174,10 @@ class LoginFrame(Frame):
         print("Username: " + username + "\nPassword: " + password)
 
         if self.app_frames.verify_user(username, password):
-            print("you did it woobsicle!!")
+            print("Correct Login")
             self.app_frames.switch_frame(MainFrame)
 
         else:
-            print(r"you suck :(")
             self.canvas.itemconfig(
                 self.login_check, 
                 text="Incorrect Username or Password",

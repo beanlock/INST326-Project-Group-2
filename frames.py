@@ -37,8 +37,6 @@ class AppFrames:
 
 if __name__ == "__main__":
     ia = Cinemagoer()
-    # Your code to retrieve recommended movies
-    
     """
     testrecommender = RecommendationEngine(demouser)
     movies = ia.search_movie("madame web")
@@ -55,6 +53,6 @@ if __name__ == "__main__":
 
     root = Tk()
     app = AppFrames(root)
-    app.register("4x", "99")
-    demouser = User("4x", "99", app.users)
+    app.register("terpguy", "123")
+    demouser = User("terpguy", "123", app.users)
     root.mainloop()
