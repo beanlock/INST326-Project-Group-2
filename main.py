@@ -1,19 +1,21 @@
-from tkinter import Frame, Label, Canvas, Entry, PhotoImage
+from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage, Label, Frame
 from pathlib import Path
+from frames import *
 
 class MainFrame(Frame):
     def __init__(self, app_frames):
         super().__init__(app_frames.master)
+        self.app_frames = app_frames
         self.configure(bg='white')
         self.setup_ui()
     
     def setup_ui(self):
-        ASSETS_PATH = Path(__file__).parent / Path("assets/frame0")
+        ASSETS_PATH = Path(__file__).parent / Path("assets/main")
 
         def relative_to_assets(path: str) -> Path:
             return ASSETS_PATH / Path(path)
 
-        canvas = Canvas(
+        self.canvas = Canvas(
             self,
             bg="#87AF86",
             height=1080,
@@ -22,38 +24,40 @@ class MainFrame(Frame):
             highlightthickness=0,
             relief="ridge"
         )
-        canvas.pack(fill='both', expand=True)
+        self.canvas.pack(fill='both', expand=True)
 
-        entry_image_1 = PhotoImage(
+        self.entry_image_1 = PhotoImage(
             file=relative_to_assets("entry_1.png"))
-        entry_bg_1 = canvas.create_image(
+        self.entry_bg_1 = self.canvas.create_image(
             960.0,
             562.0,
-            image=entry_image_1
+            image=self.entry_image_1
         )
-        entry_1 = Entry(
-            master=canvas,
+        self.entry_1 = Entry(
+            master=self.canvas,
             bd=0,
             bg="#D9D9D9",
             fg="#000716",
             highlightthickness=0
         )
-        entry_1.place(
+        self.entry_1.place(
             x=680.0,
             y=531.0,
             width=560.0,
             height=60.0
         )
 
-        image_image_1 = PhotoImage(
+        self.entry_1.insert(0,"Type to start your ReView journey")
+
+        self.image_image_1 = PhotoImage(
             file=relative_to_assets("image_1.png"))
-        image_1 = canvas.create_image(
+        self.image_1 = self.canvas.create_image(
             960.0,
             286.0,
-            image=image_image_1
+            image=self.image_image_1
         )
 
-        canvas.create_rectangle(
+        self.canvas.create_rectangle(
             0.0,
             0.0,
             1920.0,
@@ -62,11 +66,30 @@ class MainFrame(Frame):
             outline=""
         )
 
-        image_image_2 = PhotoImage(
+        self.image_image_2 = PhotoImage(
             file=relative_to_assets("image_2.png"))
-        image_2 = canvas.create_image(
+        self.image_2 = self.canvas.create_image(
             1856.0,
             60.0,
-            image=image_image_2
-        )     
+            image=self.image_image_2
+        )
+
+        self.button_2 = Button(
+            bg="#586c4c",
+            fg="#FFFFFF",
+            text = "Back to Login",
+            font=("Koulen Regular", 30 * -1),
+            activebackground="#586c4c",
+            activeforeground="#586c4c",
+            highlightthickness=0,
+            borderwidth=0.5,
+            command=lambda: self.app_frames.switch_frame(login.LoginFrame),
+            relief="flat"
+        )
+        self.button_2.place(
+            x=771.0,
+            y=880.0,
+            width=378.0,
+            height=65.0
+        )
 
