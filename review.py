@@ -1,5 +1,6 @@
 import random
 from imdb import Cinemagoer
+import pickle
 
 
 class Review():
@@ -112,16 +113,36 @@ class RecommendationEngine:
         recommended_movies(list): 10 movie titles of reccomended movies
         (in the future this will probably return movie IDs instead of titles)
         """
+        # Load pickled top movies list
+        with open('top_movies.pkl', 'rb') as f:
+            top_movies_list = pickle.load(f)
+
+        favorite_genres = self.user.favorite_genres()
+        recommended_movies = []
+        
+        for movie_details in top_movies_list:
+            if 'genres' in movie_details:  # Check if genres information is available
+                if any(genre in movie_details['genres'] for genre in favorite_genres):
+                    recommended_movies.append(movie_details['title'])
+                    print("Added " + str(movie_details['title']) + " to the list") 
+                    if len(recommended_movies) >= 10:
+                        break
+        
+        print("Tried to recommend")
+        print(recommended_movies)
+        return recommended_movies
+        
+        """
         favorite_genres = self.user.favorite_genres()
         for genre in favorite_genres:
             print(genre)
         recommended_movies = []
-        topmovies = ia.get_top250_movies()
+        
         #print(topmovies)
-        for movie in topmovies:
-            movie_id = movie.movieID
+        for movie in top_movies_list:
+            #movie_id = movie.movieID
             #print("movie id: " +  str(movie_id))
-            movie_details = ia.get_movie(movie_id)
+            #movie_details = ia.get_movie(movie_id)
             #print("Movie details: " + str(movie_details))
             if any(genre in movie_details['genres'] for genre in favorite_genres):
                 recommended_movies.append(movie_details['title'])
@@ -131,7 +152,7 @@ class RecommendationEngine:
         print("tried to recommend")
         print(recommended_movies)
         return recommended_movies
-        
+        """
         
         
 
@@ -207,15 +228,15 @@ def main():
     A example of creating a user, searching for a movie and creating a review 
     """
     testuser = User("beanlock", "brung")
-    topmovies = ia.get_top250_indian_movies()
-    print(topmovies)
+    #topmovies = ia.get_top250_indian_movies()
+    #print(topmovies)
     
 
     movies = ia.search_movie("spiderverse")
     #print(movies[:3])
     movie = movies[0]
     ia.update(movie)
-    #print(movie.infoset2keys)
+    print(movie.infoset2keys)
     movieID = movie["imdbID"]
     testuser.create_review(movieID, 9, "this movie was really cool and good i liked it a lot")
     testuser.display_all_reviews()
