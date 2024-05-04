@@ -125,7 +125,7 @@ class RecommendationEngine:
         for movie_details in top_movies_list:
             if 'genres' in movie_details:  # Check if genres information is available
                 if any(genre in movie_details['genres'] for genre in favorite_genres):
-                    recommended_movies.append(movie_details['title'])
+                    recommended_movies.append(movie_details)
                     print("Added " + str(movie_details['title']) + " to the list") 
                     if len(recommended_movies) >= 10:
                         break
