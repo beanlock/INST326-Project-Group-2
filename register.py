@@ -146,9 +146,24 @@ class Register(Frame):
             fill="#FFFFFF",
             font=("Koulen Regular", 48 * -1)
         )
+        self.register_check = self.canvas.create_text(
+            960.0,
+            520,
+            anchor="center",
+            text="",
+            fill="#FFFFFF",
+            font=("Koulen Regular", 30 * -1),
+        )
     def register_user(self):
         username = self.entry_1.get()
         password = self.entry_2.get()
-        success = self.app_frames.register(username, password)
+        success = self.app_frames.users.register_user(username, password)
         if success:
-            print("R")
+            print("Registration Successful Successful")
+            self.app_frames.switch_frame(login.LoginFrame)
+        else:
+            self.canvas.itemconfig(
+                self.register_check, 
+                text="Incorrect Username or Password",
+                fill="#ff292c"
+                )

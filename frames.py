@@ -2,7 +2,8 @@ from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage, Label
 import login
 import main
 import review
-from review import *
+from review import UserDB
+
 
 class AppFrames:
     def __init__(self, master):
@@ -13,7 +14,7 @@ class AppFrames:
         self.switch_frame(login.LoginFrame)
     
     def verify_user(self, username, password):
-        return self.users.get(username) == password
+        return self.users.verify_user(username, password)
     
     def switch_frame(self, frame_class):
         if self.current_frame is not None:

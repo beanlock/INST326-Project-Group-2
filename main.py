@@ -1,9 +1,11 @@
-from tkinter import Frame, Label, Canvas, Entry, PhotoImage
+from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage, Label, Frame
 from pathlib import Path
+from frames import *
 
 class MainFrame(Frame):
     def __init__(self, app_frames):
         super().__init__(app_frames.master)
+        self.app_frames = app_frames
         self.configure(bg='white')
         self.setup_ui()
     
@@ -70,5 +72,24 @@ class MainFrame(Frame):
             1856.0,
             60.0,
             image=self.image_image_2
-        )     
+        )
+
+        self.button_2 = Button(
+            bg="#586c4c",
+            fg="#FFFFFF",
+            text = "Back to Login",
+            font=("Koulen Regular", 30 * -1),
+            activebackground="#586c4c",
+            activeforeground="#586c4c",
+            highlightthickness=0,
+            borderwidth=0.5,
+            command=lambda: self.app_frames.switch_frame(login.LoginFrame),
+            relief="flat"
+        )
+        self.button_2.place(
+            x=771.0,
+            y=880.0,
+            width=378.0,
+            height=65.0
+        )
 

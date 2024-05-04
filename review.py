@@ -51,7 +51,7 @@ class User():
     reviewcount(int): # of reviews made by the user
     
     """
-    def __init__(self, username, password):
+    def __init__(self, username, password, user_db):
         if not maindb.is_username_used(username):
             #make sure username is not already taken 
             self.userID = generate_userID(maindb)
@@ -62,8 +62,10 @@ class User():
             self.favorites = {}
             self.friends = {}
             self.reviewcount = 0
-            maindb.users[self.userID] = self
+            user_db.add_user(self)
+            #UserDB.users[self.userID] = self
             self.genre_preferences = {}
+            print(f"{username} and {password} has been created")
     def create_review(self, movieID, rating, text):
         """
         Creates a new review and adds it to the sers list of reviews.
@@ -175,18 +177,22 @@ class UserDB():
         """
         self.used_ids.add(userID)
     
+    def add_user(self, user):
+        self.users[user.userID] = user
+    
     def verify_user(self, username, password):
-        for user in self.users.values():
-            if user.username == username and user.password == password:
-                return True
+        user = self.users.get(username)
+        if user and user.password == password:
+            return True
         return False
     
     def register_user(self, username, password):
         if self.is_username_used(username):
             return False
-        new_user = User(username, password)
-        self.users[new_user.userID] = new_user
-        self.used_usernames.add(username)
+        new_user = User(username, password, self)
+        #self.users[new_user.userID] = new_user
+        #self.used_usernames.add(username)
+        self.users[username] = new_user
         return True
 
 maindb = UserDB()
