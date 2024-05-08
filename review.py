@@ -106,6 +106,12 @@ class User():
 
     def add_to_watchlist(self, movie_details):
         self.watchlist[movie_details["title"]] = movie_details
+    #214
+    def add_genres(self, genres):
+        for genre in genres:
+            self.genre_preferences[genre] += 5
+        
+
 
 
 class RecommendationEngine:
@@ -246,11 +252,16 @@ def main():
     """
     A example of creating a user, searching for a movie and creating a review 
     """
-    testuser = User("beanlock", "brung")
+    #testdb = UserDB()
+    #testuser = User("beanlock", "brung", testuser)
     #topmovies = ia.get_top250_indian_movies()
     #print(topmovies)
     
-
+    with open('top_movies.pkl', 'rb') as f:
+            top_movies_list = pickle.load(f)
+    for movie in top_movies_list:
+        print(movie['genres'])
+    """
     movies = ia.search_movie("spiderverse")
     #print(movies[:3])
     movie = movies[0]
@@ -266,7 +277,7 @@ def main():
     #testreview = Review("123", "0133093", 5, "wow this movie is really cool")
     #print(testreview)
     #testreview.display_review()
-
+    """
 
 if __name__ == "__main__":
     main()
