@@ -45,9 +45,8 @@ class User():
     userID(str): unique ID to identify users
     username(str): unique username
     reviews(dict): dictionary of reviews, reviewID is the key, and review object is the value
-    password(str): NYI
-    watchlist(dict): NYI
-    favorites(dict): NYI
+    password(str): Password to log into the account
+    watchlist(dict): List of movies and details saved by the user to watch
     friends(dict): NYI
     reviewcount(int): # of reviews made by the user
     
@@ -69,7 +68,7 @@ class User():
             print(f"{username} and {password} has been created")
     def create_review(self, movieID, rating, text):
         """
-        Creates a new review and adds it to the sers list of reviews.
+        Creates a new review and adds it to the users list of reviews.
 
         Args:
         movie ID (str): The IMDB ID of the moving that is getting reviewed 
@@ -101,6 +100,12 @@ class User():
     def display_all_reviews(self):
         for review in self.reviews.values():
             review.display_review()
+
+    def add_friend(self, user):
+        self.friends[user.userID] = user
+
+    def add_to_watchlist(self, movie_details):
+        self.watchlist[movie_details["title"]] = movie_details
 
 
 class RecommendationEngine:
