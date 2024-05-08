@@ -11,6 +11,8 @@ from main import MainFrame
 
 from register import Register
 
+from pickgenres import Genres
+
 OUTPUT_PATH = Path(__file__).parent
 ASSETS_PATH = OUTPUT_PATH / 'assets/login'
 
@@ -175,7 +177,7 @@ class LoginFrame(Frame):
 
         if self.app_frames.verify_user(username, password):
             print("you did it woobsicle!!")
-            self.app_frames.switch_frame(MainFrame)
+            self.app_frames.switch_frame(Genres)
 
         else:
             print(r"you suck :(")
