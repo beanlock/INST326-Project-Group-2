@@ -37,8 +37,7 @@ class AppFrames:
 
 if __name__ == "__main__":
     ia = Cinemagoer()
-    
-    
+
     """
     testrecommender = RecommendationEngine(demouser)
     movies = ia.search_movie("madame web")

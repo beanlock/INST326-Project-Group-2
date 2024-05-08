@@ -32,29 +32,6 @@ class MainFrame(Frame):
         )
         self.canvas.pack(fill='both', expand=True)
 
-        self.entry_image_1 = PhotoImage(
-            file=relative_to_assets("entry_1.png"))
-        self.entry_bg_1 = self.canvas.create_image(
-            960.0,
-            562.0,
-            image=self.entry_image_1
-        )
-        self.entry_1 = Entry(
-            master=self.canvas,
-            bd=0,
-            bg="#D9D9D9",
-            fg="#000716",
-            highlightthickness=0
-        )
-        self.entry_1.place(
-            x=680.0,
-            y=531.0,
-            width=560.0,
-            height=60.0
-        )
-
-        self.entry_1.insert(0,"Type to start your ReView journey")
-
         self.image_image_1 = PhotoImage(
             file=relative_to_assets("image_1.png"))
         self.image_1 = self.canvas.create_image(
