@@ -100,6 +100,7 @@ class Register(Frame):
             font=("Koulen Regular", 30 * -1)
         )
 
+
         self.button_1 = Button(
             bg="#586c4c",
             fg="#FFFFFF",
@@ -154,6 +155,109 @@ class Register(Frame):
             fill="#FFFFFF",
             font=("Koulen Regular", 30 * -1),
         )
+
+        self.canvas.create_rectangle(
+            113.0,
+            211.0,
+            590.0,
+            841.0,
+            fill="#67805C",
+            outline="")
+
+        self.button_states = {}
+
+        self.profile_image_1 = PhotoImage(
+            file=relative_to_assets("profile_1.png"))
+        self.profile_1 = Button(
+            image=self.profile_image_1,
+            borderwidth=0,
+            highlightthickness=0,
+            command=lambda: self.toggle(self.profile_1),
+            relief="flat"
+        )
+        self.profile_1.place(
+            x=170.0,
+            y=361.0,
+            width=165.0,
+            height=165.0
+        )
+        self.button_states[self.profile_1] = False
+
+        self.profile_image_2 = PhotoImage(
+            file=relative_to_assets("profile_2.png"))
+        self.profile_2 = Button(
+            image=self.profile_image_2,
+            borderwidth=0,
+            highlightthickness=0,
+            command=lambda: self.toggle(self.profile_2),
+            relief="flat"
+        )
+        self.profile_2.place(
+            x=367.0,
+            y=361.0,
+            width=165.0,
+            height=165.0
+        )
+        self.button_states[self.profile_2] = False
+
+        self.profile_image_3 = PhotoImage(
+            file=relative_to_assets("profile_3.png"))
+        self.profile_3 = Button(
+            image=self.profile_image_3,
+            borderwidth=0,
+            highlightthickness=0,
+            command=lambda: self.toggle(self.profile_3),
+            relief="flat"
+        )
+        self.profile_3.place(
+            x=367.0,
+            y=553.0,
+            width=165.0,
+            height=165.0
+        )
+        self.button_states[self.profile_3] = False
+
+        self.profile_image_4 = PhotoImage(
+            file=relative_to_assets("profile_4.png"))
+        self.profile_4 = Button(
+            image=self.profile_image_4,
+            borderwidth=0,
+            highlightthickness=0,
+            command=lambda: self.toggle(self.profile_4),
+            relief="flat"
+        )
+        self.profile_4.place(
+            x=170.0,
+            y=553.0,
+            width=165.0,
+            height=165.0
+        )
+        self.button_states[self.profile_4] = False
+
+        self.canvas.create_text(
+            350.0,
+            280.0,
+            anchor="center",
+            text="Pick Your Avatar",
+            fill="#FFFFFF",
+            font=("Koulen Regular", 48 * -1)
+        )
+
+    def toggle(self, selected_profile):
+
+        for profile in self.button_states:
+            if profile != selected_profile:
+                profile.config(borderwidth=0, relief = 'flat')
+                self.button_states[profile] = False
+
+
+        if self.button_states[selected_profile] == True:
+            selected_profile.config(borderwidth=0, relief ='flat')
+            self.button_states[selected_profile] = False
+        else:
+            selected_profile.config(borderwidth=10, relief ='solid')
+            self.button_states[selected_profile] = True
+
     def register_user(self):
         username = self.entry_1.get()
         password = self.entry_2.get()
