@@ -174,8 +174,9 @@ class LoginFrame(Frame):
         password = self.entry_2.get()
 
         print("Username: " + username + "\nPassword: " + password)
-
-        if self.app_frames.verify_user(username, password):
+        correctlogin, user = self.app_frames.verify_user(username, password)
+        if correctlogin:
+            self.app_frames.current_user = user
             print("you did it woobsicle!!")
             self.app_frames.switch_frame(Genres)
 

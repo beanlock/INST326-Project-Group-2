@@ -66,6 +66,11 @@ class User():
             #UserDB.users[self.userID] = self
             self.genre_preferences = {}
             print(f"{username} and {password} has been created")
+
+    def __repr__(self) -> str:
+        return f"User: {self.username}, Pass: {self.password}, UserID: {self.userID}, Genre Preferences: {self.genre_preferences}"
+    
+
     def create_review(self, movieID, rating, text):
         """
         Creates a new review and adds it to the users list of reviews.
@@ -213,9 +218,12 @@ class UserDB():
         self.users[user.userID] = user
     
     def verify_user(self, username, password):
+        print(f"verifying {username} with pass {password}")
+        print(self.users)
         user = self.users.get(username)
+        print(user)
         if user and user.password == password:
-            return True
+            return (True, user)
         return False
     
     def register_user(self, username, password):
@@ -225,7 +233,7 @@ class UserDB():
         #self.users[new_user.userID] = new_user
         #self.used_usernames.add(username)
         self.users[username] = new_user
-        return True
+        return (True, new_user)
 
 maindb = UserDB()
 

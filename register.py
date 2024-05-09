@@ -157,7 +157,8 @@ class Register(Frame):
     def register_user(self):
         username = self.entry_1.get()
         password = self.entry_2.get()
-        success = self.app_frames.users.register_user(username, password)
+        success, user = self.app_frames.users.register_user(username, password)
+        self.app_frames.current_user = user
         if success:
             print("Registration Successful Successful")
             self.app_frames.switch_frame(login.LoginFrame)

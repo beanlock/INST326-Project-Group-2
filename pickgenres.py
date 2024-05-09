@@ -9,6 +9,12 @@ class Genres(Frame):
         self.app_frames = app_frames
         self.configure(bg='white')
         self.setup_ui()
+        self.genres = {"Drama" : False, 
+                       "Sci-Fi" : False, 
+                       "Comedy" :  False, 
+                       "Action" : False, 
+                       "Romance" : False, 
+                       "Adventure": False}
 
     def setup_ui(self):
         ASSETS_PATH = Path(__file__).parent / Path("assets/genre")
@@ -57,7 +63,8 @@ class Genres(Frame):
         )
         self.button_1.gray = '#73708D'
         self.button_1.color = '#645ADA'
-
+        self.button_1.text = "Drama"
+        
         self.button_1.place(
             x=283.0,
             y=334.0,
@@ -85,6 +92,7 @@ class Genres(Frame):
         )
         self.button_2.gray = '#A4A07D'
         self.button_2.color = '#DCD16D'
+        self.button_2.text = "Sci-Fi"
 
         self.button_3 = Button(
             bg='#5F7F92',
@@ -105,6 +113,7 @@ class Genres(Frame):
         )
         self.button_3.gray = '#5F7F92'
         self.button_3.color = '#57A6D2'
+        self.button_3.text = "Comedy"
 
         self.button_4 = Button(
             bg='#9E847F',
@@ -125,6 +134,7 @@ class Genres(Frame):
         )
         self.button_4.gray = '#9E847F'
         self.button_4.color = '#F49A86'
+        self.button_4.text = "Action"
 
         self.button_5 = Button(
             bg='#A17983',
@@ -145,6 +155,7 @@ class Genres(Frame):
         )
         self.button_5.gray = '#A17983'
         self.button_5.color = '#EA6E8C'
+        self.button_5.text = "Romance"
 
         self.button_6 = Button(
             bg='#907F98',
@@ -165,6 +176,7 @@ class Genres(Frame):
         )
         self.button_6.gray = '#907F98'
         self.button_6.color = '#D293F0'
+        self.button_6.text = "Adventure"
 
         self.button_7 = Button(
             bg="#586c4c",
@@ -175,7 +187,7 @@ class Genres(Frame):
             activeforeground="#586c4c",
             highlightthickness=0,
             borderwidth=0.5,
-            command=lambda: self.app_frames.switch_frame(MainFrame),
+            command=lambda: self.submit_genres(),
             relief="flat"
         )
         self.button_7.place(
@@ -192,10 +204,30 @@ class Genres(Frame):
             button.config(bg=button.color)
         else:
             button.config(bg=button.gray)
+
+        if self.genres[button.text]:
+            self.genres[button.text] = False
+            print(f"{button.text} changed to false")
+        else:
+            self.genres[button.text] = True
+            print(f"{button.text} changed to True")
+    
+    def submit_genres(self):
+        try:
+            print("called submit_genres")
+            selectedlist = []
+            for genre, selected in self.genres.items():
+                if selected:
+                    print(f"added {genre} to the list")
+                    selectedlist.append(genre)
+            self.app_frames.set_genres(selectedlist)
+            self.app_frames.switch_frame(MainFrame)
+        except Exception as e:
+            print("An error occurred:", e)
+
+
         
-        
-    def selection(self):
-        pass
+    
 
 
 

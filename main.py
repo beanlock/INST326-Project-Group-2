@@ -66,7 +66,7 @@ class MainFrame(Frame):
             activeforeground="#586c4c",
             highlightthickness=0,
             borderwidth=0.5,
-            command=lambda: self.display_recommendations(generate_recommended_movies()),
+            command=lambda: self.display_recommendations(self.generate_recommended_movies(self.app_frames.current_user)),
             relief="flat"
         )
         self.button_1.place(
@@ -75,7 +75,7 @@ class MainFrame(Frame):
             width=378.0,
             height=65.0
         )
-
+        print(str(self.app_frames.current_user))
         self.button_2 = Button(
             bg="#586c4c",
             fg="#FFFFFF",
@@ -96,12 +96,12 @@ class MainFrame(Frame):
         )
 
     def display_recommendations(self, recommended_movies):
-        # Clear existing widgets
+        
         for widget in self.winfo_children():
             widget.destroy()
         num_columns = 4
         num_rows = (len(recommended_movies) + num_columns - 1) // num_columns
-        # Display new recommendations
+        
         for index, movie in enumerate(recommended_movies):
             title = movie.get('title', 'Unknown Title')
             cover_url = movie.get('full-size cover url', '')
@@ -112,43 +112,42 @@ class MainFrame(Frame):
             recommendation_frame = Frame(self, background="#67805C")
             recommendation_frame.grid(row=row, column=column, padx=10, pady=10)
 
-            # Create a label for movie title
+            
             title_label = Label(recommendation_frame, text=title, font=("Helvetica", 12), fg="#ffffff", bg="#67805C")
             title_label.pack()
 
-            # Load movie cover image from URL and create a label
+            
             if cover_url:
-                # Fetch image from URL using requests
+                
                 response = requests.get(cover_url)
                 image_data = response.content
 
-                # Open image using Pillow
+                
                 image = Image.open(BytesIO(image_data))
 
-                # Resize image if necessary
-                max_width = 200  # Adjust as needed
-                max_height = 200  # Adjust as needed
+                
+                max_width = 200  
+                max_height = 200  
                 image.thumbnail((max_width, max_height))
 
-                # Convert image to Tkinter PhotoImage
                 cover_image = ImageTk.PhotoImage(image)
 
-                # Create label to display image
+                
                 cover_label = Label(recommendation_frame, image=cover_image)
-                cover_label.image = cover_image  # To prevent garbage collection
+                cover_label.image = cover_image 
                 cover_label.pack()
 
 
 
-        self.update_idletasks()  # Ensure GUI updates immediately
+        self.update_idletasks()  
 
 
         """
-            # Create a label for movie title
+            
             title_label = Label(self, text=title, font=("Koulen", 12))
             title_label.grid(row=index, column=0, padx=10, pady=10)
 
-            # Load movie cover image from URL
+            
             if cover_url:
                 # Fetch image from URL using requests
                 response = requests.get(cover_url)
@@ -157,20 +156,20 @@ class MainFrame(Frame):
                 # Open image using Pillow
                 image = Image.open(BytesIO(image_data))
 
-                # Resize image if necessary
+                
                 max_width = 200  # Adjust as needed
                 max_height = 200  # Adjust as needed
                 image.thumbnail((max_width, max_height))
 
-                # Convert image to Tkinter PhotoImage
+                
                 cover_image = ImageTk.PhotoImage(image)
 
-                # Create label to display image
+                
                 cover_label = Label(self, image=cover_image)
                 cover_label.image = cover_image  # To prevent garbage collection
                 cover_label.grid(row=index, column=col + 1, padx=10, pady=10)
         
-        # Add back button
+        
         back_button = Button(
             self,
             text="Back to Login",
@@ -180,10 +179,22 @@ class MainFrame(Frame):
 
         self.update_idletasks()  # Ensure GUI updates immediately
         """
+    def generate_recommended_movies(self, user):
+        engine = RecommendationEngine(user)
+        reclist = engine.recommend()
+        return reclist
+        
+
+    
 
 userdb = UserDB()
 
-def generate_recommended_movies():
+def generate_recommended_movies(user):
+    engine = RecommendationEngine(user)
+    reclist = engine.recommend()
+    return reclist
+
+    """
     ia = Cinemagoer()
     demouser = User("4x", "99", userdb)
     testrecommender = RecommendationEngine(demouser)
@@ -198,3 +209,4 @@ def generate_recommended_movies():
     for movie in recommended_movies:
         print("Reccomended: " + str(movie))
     return recommended_movies
+    """
