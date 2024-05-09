@@ -261,7 +261,7 @@ class Register(Frame):
     def register_user(self):
         username = self.entry_1.get()
         password = self.entry_2.get()
-
+        
 
         success, user = self.app_frames.users.register_user(username, password)
         self.app_frames.current_user = user
@@ -283,3 +283,4 @@ class Register(Frame):
                 text="Incorrect Username or Password",
                 fill="#ff292c"
                 )
+        

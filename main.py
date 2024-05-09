@@ -49,9 +49,9 @@ class MainFrame(Frame):
             outline=""
         )
 
-        print(f"{self.appframes.current_user.profile+1}")
+        print(f"{self.app_frames.current_user.profile+1}")
 
-        self.profile_image = Image.open(relative_to_assets(f"profile{self.app_frames.current_user.profile}.png"))
+        self.profile_image = Image.open(relative_to_assets(f"profile_{self.app_frames.current_user.profile}.png"))
         self.resized_image = self.profile_image.resize((120,120))
         self.tk_image = ImageTk.PhotoImage(self.resized_image)
         self.image_2 = self.canvas.create_image(
