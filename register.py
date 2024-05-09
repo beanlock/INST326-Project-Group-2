@@ -3,16 +3,41 @@ from pathlib import Path
 from frames import *
 
 class Register(Frame):
+    """
+     Frame for registering a new user account in the application.
+
+    Attributes:
+        app_frames (AppFrames): The controller of the main application frames.
+    """
     def __init__(self, app_frames):
+        """
+         Initialize the Register frame with the parent application frames.
+
+        Args:
+            app_frames (AppFrames): The controller of the main application frames.
+        """
         super().__init__(app_frames.master)
         self.app_frames = app_frames
         self.configure(bg='white')
         self.setup_ui()
     
     def setup_ui(self):
+        """
+        Set up the user interface of the registration frame. This includes layout of input fields,
+        buttons, and other UI components for the user registration process.
+        """
         ASSETS_PATH = Path(__file__).parent / Path("assets/register")
 
         def relative_to_assets(path: str) -> Path:
+            """
+             Get the absolute path for a file located in the registration frame's assets directory.
+
+            Args:
+                path (str): The relative path from the assets directory.
+
+            Returns:
+                Path: The absolute path computed from the base assets directory.
+            """
             return ASSETS_PATH / Path(path)
 
         self.canvas = Canvas(
@@ -244,6 +269,12 @@ class Register(Frame):
         )
 
     def toggle(self, selected_profile):
+        """
+        Toggle the selection state and appearance of a profile button.
+
+        Args:
+            selected_profile (Button): The profile button to toggle.
+        """
         print(f"selected_profile: {selected_profile}, value: {self.button_states[selected_profile]}")
 
         for profile in self.button_states:
@@ -274,6 +305,9 @@ class Register(Frame):
         """
 
     def register_user(self):
+        """
+        Register a new user with the username and password provided in the entry fields.
+        """
         username = self.entry_1.get()
         password = self.entry_2.get()
         

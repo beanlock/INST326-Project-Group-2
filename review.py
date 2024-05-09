@@ -5,14 +5,14 @@ import pickle
 
 class Review():
     """
-    Review: a user's review of a movie
+     A class to represent a user's review of a movie.
 
     Attributes:
-    reviewID: ID composite from userID + # of reviews
-    ownerID: ID of the person who left the review
-    movieID: imdb ID of the movie being reviewed
-    rating: 1-10 rating of the movie 
-    text: Text of the review written by the user
+    reviewID (str): ID composed from userID plus number of reviews.
+    ownerID (str): ID of the person who left the review.
+    movieID (str): IMDb ID of the movie being reviewed.
+    rating (int): Rating of the movie from 1 to 10.
+    text (str): Text of the review written by the user.
     """
     def __init__(self, reviewID, ownerID, movieID, rating, text):
         self.reviewID = reviewID 
@@ -23,7 +23,7 @@ class Review():
 
     def display_review(self):
         """
-        Prints the review with the the movie title the useraname of the reviewer, the text of the review and the number of stars.
+        Prints the review with the movie title, username of the reviewer, review text, and star rating.
         """
         #retrieve the movie title using the imdb ID and ia.get_movie function
         movietitle = ia.get_movie(self.movieID)["title"]
@@ -39,16 +39,18 @@ class Review():
 
 class User():
     """
-    User: Handles user creation and actions, like leaving reviews, displaying reviews, etc.
+     A class to handle user activities such as creating and managing reviews and movie preferences.
 
     Attributes:
-    userID(str): unique ID to identify users
-    username(str): unique username
-    reviews(dict): dictionary of reviews, reviewID is the key, and review object is the value
-    password(str): Password to log into the account
-    watchlist(dict): List of movies and details saved by the user to watch
-    friends(dict): NYI
-    reviewcount(int): # of reviews made by the user
+    userID (str): Unique ID to identify users.
+    username (str): Unique username.
+    password (str): Password for user authentication.
+    reviews (dict): Dictionary of reviews, where the reviewID is the key, and the Review object is the value.
+    watchlist (dict): List of movies saved by the user.
+    favorites (dict): User's favorite movies (not yet implemented).
+    friends (dict): User's friends (not yet implemented).
+    reviewcount (int): Count of reviews made by the user.
+    genre_preferences (dict): User's preferred genres with scores.
     
     """
     def __init__(self, username, password, user_db):
@@ -73,12 +75,12 @@ class User():
 
     def create_review(self, movieID, rating, text):
         """
-        Creates a new review and adds it to the users list of reviews.
+        Creates a new review and adds it to the user's list of reviews.
 
         Args:
-        movie ID (str): The IMDB ID of the moving that is getting reviewed 
-        rating (int): The users rating of the movie
-        text (str): The users typed out review of the movie
+        movieID (str): The IMDb ID of the movie being reviewed.
+        rating (int): The user's rating of the movie.
+        text (str): The user's review text.
         """
         reviewID = str(self.reviewcount) + self.userID
         review = Review(reviewID, self.userID, movieID, rating, text)
@@ -94,6 +96,12 @@ class User():
                     self.genre_preferences[genre] = 1
 
     def favorite_genres(self):
+        """
+        Returns the top three favorite genres of the user.
+
+        Returns:
+        list: Top three genres based on user preferences.
+        """
         sorted_genres = sorted(self.genre_preferences, key=self.genre_preferences.get, reverse=True)
         return sorted_genres[:3]  #Returns top 3 genres
     
@@ -103,10 +111,14 @@ class User():
             movieIDS.append(review.movieID)
 
     def display_all_reviews(self):
+        """
+        Displays all reviews made by the user.
+        """
         for review in self.reviews.values():
             review.display_review()
 
     def add_friend(self, user):
+    
         self.friends[user.userID] = user
 
     def add_to_watchlist(self, movie_details):

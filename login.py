@@ -17,11 +17,38 @@ OUTPUT_PATH = Path(__file__).parent
 ASSETS_PATH = OUTPUT_PATH / 'assets/login'
 
 def relative_to_assets(path: str) -> Path:
+    """
+     Get the absolute path to the assets folder.
+
+    Args:
+        path (str): The relative path from the assets directory.
+
+    Returns:
+        Path: The absolute path obtained by joining the ASSETS_PATH with the given relative path.
+    """
     return ASSETS_PATH / Path(path)
 
 
 class LoginFrame(Frame):
+    """
+    A Frame for handling user login in a Tkinter application.
+
+    Methods:
+        setup_ui: Set up the user interface elements for the login frame.
+        login: Handle the login process using user credentials.
+        on_password_entry_click: Clear the password field when focused if it contains default text.
+        on_password_entry_focusout: Reinsert default text if the password field is empty when unfocused.
+        on_username_entry_click: Clear the username field when focused if it contains default text.
+        on_username_entry_focusout: Reinsert default text if the username field is empty when unfocused.
+    """
+    
     def __init__(self, app_frames):
+        """
+        Initialize the LoginFrame with the parent application frame setup.
+
+        Args:
+            app_frames (AppFrames): The main application frame handler.
+        """
         super().__init__(app_frames.master, bg="#FFFFFF")
         self.app_frames = app_frames
         self.setup_ui()
@@ -31,6 +58,9 @@ class LoginFrame(Frame):
         self.entry_2.bind("<FocusOut>", self.on_password_entry_focusout)
 
     def setup_ui(self):
+        """
+        Set up the user interface elements for the login frame.
+        """
         print(relative_to_assets("image_1"))
         self.canvas = Canvas(
             self,
@@ -191,45 +221,45 @@ class LoginFrame(Frame):
                 )
             
     def on_password_entry_click(self, event):
-        '''
+        """
         Password Focus: Removes the enter password text when the user clicks on the box
 
         Parameters: 
         event: The event object representing the FocusIn event.
-        '''
+        """
         if self.entry_2.get() == "Enter Password":
             self.entry_2.delete(0, "end")
             self.entry_2.config(fg = 'black', show="*")
 
     def on_password_entry_focusout(self, event):
-        '''
+        """
         Password Focus out: Reinserts the Enter Password text when the user clicks out of the password textbox
 
         Parameters: 
         event: The event object representing the FocusOut event.
-        '''
+        """
         if not self.entry_2.get():
             self.entry_2.insert(0, "Enter Password")
             self.entry_2.config(fg = 'black', show="")
 
     def on_username_entry_click(self, event):
-        '''
+        """
         Username Focus in: Removes the enter username text when the user clicks on the box
 
         Parameters: 
         event: The event object representing the FocusIn event.
-        '''
+        """
         if self.entry_1.get() == "Enter Username":
             self.entry_1.delete(0, "end")
             self.entry_1.config(fg = 'black')
 
     def on_username_entry_focusout(self, event):
-        '''
+        """
         Username Focus out: Reinserts the Enter Username text when the user clicks out of the username textbox
 
         Parameters: 
         event: The event object representing the FocusOut event.
-        '''
+        """
         if not self.entry_1.get():
             self.entry_1.insert(0, "Enter Username")
             self.entry_1.config(fg = 'black')
