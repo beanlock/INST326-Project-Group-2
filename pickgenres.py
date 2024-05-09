@@ -4,7 +4,20 @@ from frames import *
 from main import MainFrame
 
 class Genres(Frame):
+    """
+     A Frame that allows users to select their preferred movie genres in the application.
+
+    Attributes:
+        app_frames (AppFrames): The controller of the main application frames.
+        genres (dict): Tracks which genres are selected with boolean values.
+    """
     def __init__(self, app_frames):
+        """
+         Initialize the Genres frame with the parent application frames.
+
+        Args:
+            app_frames (AppFrames): The controller of the main application frames.
+        """
         super().__init__(app_frames.master)
         self.app_frames = app_frames
         self.configure(bg='white')
@@ -17,9 +30,22 @@ class Genres(Frame):
                        "Adventure": False}
 
     def setup_ui(self):
+        """
+        Set up the user interface of the genre selection frame. This includes layout of buttons
+        and other UI components to allow users to toggle their genre preferences.
+        """
         ASSETS_PATH = Path(__file__).parent / Path("assets/genre")
 
         def relative_to_assets(path: str) -> Path:
+            """
+             Get the absolute path for a file located in the genre frame's assets directory.
+
+            Args:
+                path (str): The relative path from the assets directory.
+
+            Returns:
+                Path: The absolute path computed from the base assets directory.
+            """
             return ASSETS_PATH / Path(path)
 
         self.canvas = Canvas(
@@ -198,6 +224,12 @@ class Genres(Frame):
         )
 
     def toggle(self, button):
+        """
+        Toggle the color and selection status of a genre button when clicked.
+
+        Args:
+            button (Button): The genre button to toggle.
+        """
         current_color = button['bg']
 
         if current_color == button.gray:
@@ -213,6 +245,9 @@ class Genres(Frame):
             print(f"{button.text} changed to True")
     
     def submit_genres(self):
+        """
+        Submit the selected genres and switch to the main application frame if any genres are selected.
+        """
         try:
             print("called submit_genres")
             selectedlist = []

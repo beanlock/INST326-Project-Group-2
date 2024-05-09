@@ -9,16 +9,42 @@ import requests
 from io import BytesIO
 
 class MainFrame(Frame):
+    """
+    MainFrame provides the primary user interface in the application once the user has logged in.
+    It displays user profiles and movie recommendations.
+
+    Attributes:
+        app_frames (AppFrames): The controller of the main application frames.
+    """
     def __init__(self, app_frames):
+        """
+          Initialize the MainFrame with the parent application frames.
+
+        Args:
+            app_frames (AppFrames): The controller of the main application frames.
+        """
         super().__init__(app_frames.master)
         self.app_frames = app_frames
         self.configure(bg='#87af86')
         self.setup_ui()
     
     def setup_ui(self):
+        """
+        Set up the user interface of the main frame. This includes layout of buttons,
+        profile images, and other UI components.
+        """
         ASSETS_PATH = Path(__file__).parent / Path("assets/main")
 
         def relative_to_assets(path: str) -> Path:
+            """
+            Get the absolute path for a file located in the main frame's assets directory.
+
+            Args:
+                path (str): The relative path from the assets directory.
+
+            Returns:
+                Path: The absolute path computed from the base assets directory.
+            """
             return ASSETS_PATH / Path(path)
 
         self.canvas = Canvas(
@@ -99,6 +125,12 @@ class MainFrame(Frame):
         )
 
     def display_recommendations(self, recommended_movies):
+        """
+        Display the recommended movies in a grid layout.
+
+        Args:
+            recommended_movies (list of dict): A list of recommended movie details including title and cover image URL.
+        """
 
         for widget in self.winfo_children():
             widget.destroy()

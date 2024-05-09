@@ -1,18 +1,19 @@
 import random
 from imdb import Cinemagoer
 import pickle
+import pytest
 
 
 class Review():
     """
-    Review: a user's review of a movie
+    A class to represent a user's review of a movie.
 
     Attributes:
-    reviewID: ID composite from userID + # of reviews
-    ownerID: ID of the person who left the review
-    movieID: imdb ID of the movie being reviewed
-    rating: 1-10 rating of the movie 
-    text: Text of the review written by the user
+    reviewID (str): ID composed from userID plus number of reviews.
+    ownerID (str): ID of the person who left the review.
+    movieID (str): IMDb ID of the movie being reviewed.
+    rating (int): Rating of the movie from 1 to 10.
+    text (str): Text of the review written by the user.
     """
     def __init__(self, reviewID, ownerID, movieID, rating, text):
         self.reviewID = reviewID 
@@ -23,7 +24,7 @@ class Review():
 
     def display_review(self):
         """
-        Prints the review with the the movie title the useraname of the reviewer, the text of the review and the number of stars.
+        Prints the review with the movie title, username of the reviewer, review text, and star rating.
         """
         #retrieve the movie title using the imdb ID and ia.get_movie function
         movietitle = ia.get_movie(self.movieID)["title"]
@@ -39,16 +40,18 @@ class Review():
 
 class User():
     """
-    User: Handles user creation and actions, like leaving reviews, displaying reviews, etc.
+    A class to handle user activities such as creating and managing reviews and movie preferences.
 
     Attributes:
-    userID(str): unique ID to identify users
-    username(str): unique username
-    reviews(dict): dictionary of reviews, reviewID is the key, and review object is the value
-    password(str): Password to log into the account
-    watchlist(dict): List of movies and details saved by the user to watch
-    friends(dict): NYI
-    reviewcount(int): # of reviews made by the user
+    userID (str): Unique ID to identify users.
+    username (str): Unique username.
+    password (str): Password for user authentication.
+    reviews (dict): Dictionary of reviews, where the reviewID is the key, and the Review object is the value.
+    watchlist (dict): List of movies saved by the user.
+    favorites (dict): User's favorite movies (not yet implemented).
+    friends (dict): User's friends (not yet implemented).
+    reviewcount (int): Count of reviews made by the user.
+    genre_preferences (dict): User's preferred genres with scores.
     
     """
     def __init__(self, username, password, user_db):
@@ -63,7 +66,7 @@ class User():
             self.friends = {}
             self.reviewcount = 0
             user_db.add_user(self)
-            #UserDB.users[self.userID] = self
+            user_db.users[self.userID] = self
             self.genre_preferences = {}
             print(f"{username} and {password} has been created")
 
@@ -73,12 +76,12 @@ class User():
 
     def create_review(self, movieID, rating, text):
         """
-        Creates a new review and adds it to the users list of reviews.
+        Creates a new review and adds it to the user's list of reviews.
 
         Args:
-        movie ID (str): The IMDB ID of the moving that is getting reviewed 
-        rating (int): The users rating of the movie
-        text (str): The users typed out review of the movie
+        movieID (str): The IMDb ID of the movie being reviewed.
+        rating (int): The user's rating of the movie.
+        text (str): The user's review text.
         """
         reviewID = str(self.reviewcount) + self.userID
         review = Review(reviewID, self.userID, movieID, rating, text)
@@ -92,8 +95,15 @@ class User():
                     self.genre_preferences[genre] += 1
                 else:
                     self.genre_preferences[genre] = 1
+        return reviewID
 
     def favorite_genres(self):
+        """
+        Returns the top three favorite genres of the user.
+
+        Returns:
+        list: Top three genres based on user preferences.
+        """
         sorted_genres = sorted(self.genre_preferences, key=self.genre_preferences.get, reverse=True)
         return sorted_genres[:3]  #Returns top 3 genres
     
@@ -103,10 +113,14 @@ class User():
             movieIDS.append(review.movieID)
 
     def display_all_reviews(self):
+        """
+        Displays all reviews made by the user.
+        """
         for review in self.reviews.values():
             review.display_review()
 
     def add_friend(self, user):
+    
         self.friends[user.userID] = user
 
     def add_to_watchlist(self, movie_details):
@@ -131,7 +145,7 @@ class RecommendationEngine:
         recommended_movies(list): 10 movie titles of reccomended movies
         (in the future this will probably return movie IDs instead of titles)
         """
-        # Load pickled top movies list
+        
         with open('top_movies.pkl', 'rb') as f:
             top_movies_list = pickle.load(f)
 
@@ -139,7 +153,7 @@ class RecommendationEngine:
         recommended_movies = []
         
         for movie_details in top_movies_list:
-            if 'genres' in movie_details:  # Check if genres information is available
+            if 'genres' in movie_details:  
                 if any(genre in movie_details['genres'] for genre in favorite_genres):
                     recommended_movies.append(movie_details)
                     print("Added " + str(movie_details['title']) + " to the list") 
@@ -184,12 +198,12 @@ class RecommendationEngine:
 #database of all users, keeps track of user objects and IDs
 class UserDB():
     """
-    Contains the database of usees with thei ID's and usernames that are all different in order to avoid confusion
+    Contains the database of users with their ID's and usernames that are all unique in order to avoid duplicates
 
     Attributes: 
-    used_ids (set): A set of all user ID's to prevent repatition 
-    used_usernames (set): A set of used usernames to prevent repatition
-    users (dict): A dictinoary of user objects, with the key bing userID
+    used_ids (set): A set of all user ID's to prevent repetition 
+    used_usernames (set): A set of used usernames to prevent repetition
+    users (dict): A dictionary of user objects, with the key being username
     """
     def __init__(self):
         self.used_ids = set()
@@ -215,13 +229,14 @@ class UserDB():
         self.used_ids.add(userID)
     
     def add_user(self, user):
-        self.users[user.userID] = user
-    
+        self.users[user.username] = user
+        self.add_user_id(user.userID)
+
     def verify_user(self, username, password):
         print(f"verifying {username} with pass {password}")
         print(self.users)
         user = self.users.get(username)
-        print(user)
+        print("user is supposed to be HEY LOOK HERE:" + str(user))
         if user and user.password == password:
             return (True, user)
         return (False, None)
@@ -246,7 +261,7 @@ def generate_userID(db):
     db (UserDB): The User database instance to check for existing ID's
 
     Returns:
-    str: A unuque userID
+    str: A unique userID
     """
     while True:
         user_id = str(random.randint(0, 9999))
@@ -261,7 +276,6 @@ def main():
     A example of creating a user, searching for a movie and creating a review 
     """
     #testdb = UserDB()
-    #testuser = User("beanlock", "brung", testuser)
     #topmovies = ia.get_top250_indian_movies()
     #print(topmovies)
     
@@ -287,6 +301,61 @@ def main():
     #testreview.display_review()
     """
 
+
+def test_Review():
+    testdb = UserDB()
+    assert testdb.users == {}
+    assert testdb.used_ids == set()
+    assert testdb.used_usernames == set()
+
+    testuser = User("beanlock", "brung", testdb)
+    print(testdb.used_ids)
+    assert testuser.userID in testdb.used_ids
+    assert testuser.username == 'beanlock'
+    assert testuser.password == 'brung'
+    assert testuser.reviews == {}
+    movies = ia.search_movie("spiderverse")
+    #print(movies[:3])
+    movie = movies[0]
+    ia.update(movie)
+    #print(movie.infoset2keys)
+    movieID = movie["imdbID"]
+    reviewID = testuser.create_review(movieID, 9, "this movie was really cool and good i liked it a lot")
+    print(testuser.genre_preferences)
+    assert testuser.genre_preferences == {'Animation': 1, 'Action': 1, 'Adventure': 1, 'Fantasy': 1, 'Sci-Fi': 1}
+    assert testuser.reviews[reviewID].ownerID in testdb.used_ids
+    assert testuser.reviews[reviewID].movieID == movieID
+    assert testuser.reviews[reviewID].rating == 9
+    #testuser.display_all_reviews()
+    testRecommender = RecommendationEngine(testuser)
+    recommended_movies = testRecommender.recommend()
+    movietitles = []
+    for movie in recommended_movies:
+        movietitles.append(movie['title'])
+    
+    assert movietitles == ['The Dark Knight', 
+                           'The Lord of the Rings: The Return of the King', 
+                           'The Lord of the Rings: The Fellowship of the Ring', 
+                           'The Good, the Bad and the Ugly', 
+                           'The Lord of the Rings: The Two Towers', 
+                           'Inception', 
+                           'Star Wars: Episode V - The Empire Strikes Back', 
+                           'The Matrix', 
+                           'Interstellar', 
+                           'Dune: Part Two']    
+    
+    login_attempt = testdb.verify_user('beanlock', 'brung')
+    print(login_attempt)
+    assert login_attempt == (True, testuser)
+    register_attempt = testdb.register_user('deadshotguy', 'officerboles')
+    print(register_attempt)
+    assert register_attempt == (True, testdb.users.get('deadshotguy'))
+    #testreview = Review("123", "0133093", 5, "wow this movie is really cool")
+    #testreview.display_review()
+    
+
 if __name__ == "__main__":
+    test_Review()
     main()
+    
 
