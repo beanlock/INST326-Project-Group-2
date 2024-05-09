@@ -10,7 +10,7 @@ from io import BytesIO
 
 class MainFrame(Frame):
     """
-     MainFrame provides the primary user interface in the application once the user has logged in.
+    MainFrame provides the primary user interface in the application once the user has logged in.
     It displays user profiles and movie recommendations.
 
     Attributes:

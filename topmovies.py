@@ -1,6 +1,6 @@
 import pickle
 
-# Load the list of movie objects from the file
+# load pickled movies from file
 with open('top_movies.pkl', 'rb') as f:
     top_movies_list = pickle.load(f)
 

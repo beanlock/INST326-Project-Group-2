@@ -18,7 +18,7 @@ ASSETS_PATH = OUTPUT_PATH / 'assets/login'
 
 def relative_to_assets(path: str) -> Path:
     """
-     Get the absolute path to the assets folder.
+    Get the absolute path to the assets folder.
 
     Args:
         path (str): The relative path from the assets directory.

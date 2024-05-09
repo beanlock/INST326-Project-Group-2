@@ -4,14 +4,14 @@ from frames import *
 
 class Register(Frame):
     """
-     Frame for registering a new user account in the application.
+    Frame for registering a new user account in the application.
 
     Attributes:
         app_frames (AppFrames): The controller of the main application frames.
     """
     def __init__(self, app_frames):
         """
-         Initialize the Register frame with the parent application frames.
+        Initialize the Register frame with the parent application frames.
 
         Args:
             app_frames (AppFrames): The controller of the main application frames.
@@ -30,7 +30,7 @@ class Register(Frame):
 
         def relative_to_assets(path: str) -> Path:
             """
-             Get the absolute path for a file located in the registration frame's assets directory.
+            Get the absolute path for a file located in the registration frame's assets directory.
 
             Args:
                 path (str): The relative path from the assets directory.

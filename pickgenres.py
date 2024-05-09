@@ -31,7 +31,7 @@ class Genres(Frame):
 
     def setup_ui(self):
         """
-         Set up the user interface of the genre selection frame. This includes layout of buttons
+        Set up the user interface of the genre selection frame. This includes layout of buttons
         and other UI components to allow users to toggle their genre preferences.
         """
         ASSETS_PATH = Path(__file__).parent / Path("assets/genre")

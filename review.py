@@ -6,7 +6,7 @@ import pytest
 
 class Review():
     """
-     A class to represent a user's review of a movie.
+    A class to represent a user's review of a movie.
 
     Attributes:
     reviewID (str): ID composed from userID plus number of reviews.
@@ -40,7 +40,7 @@ class Review():
 
 class User():
     """
-     A class to handle user activities such as creating and managing reviews and movie preferences.
+    A class to handle user activities such as creating and managing reviews and movie preferences.
 
     Attributes:
     userID (str): Unique ID to identify users.
@@ -145,7 +145,7 @@ class RecommendationEngine:
         recommended_movies(list): 10 movie titles of reccomended movies
         (in the future this will probably return movie IDs instead of titles)
         """
-        # Load pickled top movies list
+        
         with open('top_movies.pkl', 'rb') as f:
             top_movies_list = pickle.load(f)
 
@@ -153,7 +153,7 @@ class RecommendationEngine:
         recommended_movies = []
         
         for movie_details in top_movies_list:
-            if 'genres' in movie_details:  # Check if genres information is available
+            if 'genres' in movie_details:  
                 if any(genre in movie_details['genres'] for genre in favorite_genres):
                     recommended_movies.append(movie_details)
                     print("Added " + str(movie_details['title']) + " to the list") 
