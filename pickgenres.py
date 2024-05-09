@@ -220,6 +220,8 @@ class Genres(Frame):
                 if selected:
                     print(f"added {genre} to the list")
                     selectedlist.append(genre)
+            if len(selectedlist) == 0:
+                return
             self.app_frames.set_genres(selectedlist)
             self.app_frames.switch_frame(MainFrame)
         except Exception as e:

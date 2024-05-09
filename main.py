@@ -99,7 +99,11 @@ class MainFrame(Frame):
         )
 
     def display_recommendations(self, recommended_movies):
-        
+        if len(recommended_movies) == 0:
+            recommendation_frame = Frame(self, background="#67805C").pack()
+            print("scuffed pick a genre")
+            label = Label(recommendation_frame, text="Something went wrong. Please pick a genre.")
+            label.pack()
         for widget in self.winfo_children():
             widget.destroy()
         num_columns = 4

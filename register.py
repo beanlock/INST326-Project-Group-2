@@ -244,7 +244,21 @@ class Register(Frame):
         )
 
     def toggle(self, selected_profile):
+        print(f"selected_profile: {selected_profile}, value: {self.button_states[selected_profile]}")
 
+        for profile in self.button_states:
+            if profile == selected_profile:
+                self.button_states[profile] = not self.button_states[profile] 
+                if self.button_states[profile]:
+                    selected_profile.config(borderwidth=10, relief='solid')
+                else:
+                    selected_profile.config(borderwidth=0,  relief='flat')
+            else:
+                profile.config(borderwidth=0, relief='flat')
+                self.button_states[profile] = False
+
+
+        """
         for profile in self.button_states:
             if profile != selected_profile:
                 profile.config(borderwidth=0, relief = 'flat')
@@ -257,6 +271,7 @@ class Register(Frame):
         else:
             selected_profile.config(borderwidth=10, relief ='solid')
             self.button_states[selected_profile] = True
+        """
 
     def register_user(self):
         username = self.entry_1.get()
@@ -269,12 +284,17 @@ class Register(Frame):
             print("Registration Successful Successful")
 
             i = 1
+            print(f"{self.button_states.keys()}, {self.button_states.values()}")
             for button in self.button_states.values():
                 if not button:
                     i+= 1
                 else:
                     print(f"User profile set to #{i}")
                     user.profile=i
+            try:
+                user.profile
+            except Exception as e:
+                user.profile = 5
 
             self.app_frames.switch_frame(login.LoginFrame)
         else:
