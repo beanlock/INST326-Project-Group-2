@@ -30,13 +30,30 @@ class AppFrames:
         )
     
     def register(self, username, password):
-        success = self.users.register_user(username,password)
+        print("registered a current user!")
+        success, user = self.users.register_user(username,password)
+        self.current_user = user
         return success
+    
+    def set_genres(self, genres):
+        print("called set_genres with " + str(genres))
+        for genre in genres:
+            if (genre in self.current_user.genre_preferences):
+                self.current_user.genre_preferences[genre] += 5
+                print(f"genre in preferences, added 5 to {genre}")
+            else:
+                self.current_user.genre_preferences[genre] = 5
+                print(f"genre not in preferences, initialized {genre} with 5")
+
     
 
 
 if __name__ == "__main__":
-    ia = Cinemagoer()
+
+    root = Tk()
+    app = AppFrames(root)
+    root.mainloop()
+
     """
     testrecommender = RecommendationEngine(demouser)
     movies = ia.search_movie("madame web")
@@ -50,9 +67,8 @@ if __name__ == "__main__":
         print(movie)
     """
 
-
+    """
     root = Tk()
     app = AppFrames(root)
-    app.register("terpguy", "123")
-    demouser = User("terpguy", "123", app.users)
-    root.mainloop()
+    """
+

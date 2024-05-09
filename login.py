@@ -11,6 +11,8 @@ from main import MainFrame
 
 from register import Register
 
+from pickgenres import Genres
+
 OUTPUT_PATH = Path(__file__).parent
 ASSETS_PATH = OUTPUT_PATH / 'assets/login'
 
@@ -173,9 +175,13 @@ class LoginFrame(Frame):
 
         print("Username: " + username + "\nPassword: " + password)
 
-        if self.app_frames.verify_user(username, password):
+        correctlogin, user = self.app_frames.verify_user(username, password)
+        if correctlogin:
+            self.app_frames.current_user = user
             print("Correct Login")
-            self.app_frames.switch_frame(MainFrame)
+            self.app_frames.switch_frame(Genres)
+            #pls merge
+
 
         else:
             self.canvas.itemconfig(

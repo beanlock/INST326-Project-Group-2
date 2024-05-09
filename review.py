@@ -45,9 +45,8 @@ class User():
     userID(str): unique ID to identify users
     username(str): unique username
     reviews(dict): dictionary of reviews, reviewID is the key, and review object is the value
-    password(str): NYI
-    watchlist(dict): NYI
-    favorites(dict): NYI
+    password(str): Password to log into the account
+    watchlist(dict): List of movies and details saved by the user to watch
     friends(dict): NYI
     reviewcount(int): # of reviews made by the user
     
@@ -67,9 +66,14 @@ class User():
             #UserDB.users[self.userID] = self
             self.genre_preferences = {}
             print(f"{username} and {password} has been created")
+
+    def __repr__(self) -> str:
+        return f"User: {self.username}, Pass: {self.password}, UserID: {self.userID}, Genre Preferences: {self.genre_preferences}"
+    
+
     def create_review(self, movieID, rating, text):
         """
-        Creates a new review and adds it to the sers list of reviews.
+        Creates a new review and adds it to the users list of reviews.
 
         Args:
         movie ID (str): The IMDB ID of the moving that is getting reviewed 
@@ -101,6 +105,18 @@ class User():
     def display_all_reviews(self):
         for review in self.reviews.values():
             review.display_review()
+
+    def add_friend(self, user):
+        self.friends[user.userID] = user
+
+    def add_to_watchlist(self, movie_details):
+        self.watchlist[movie_details["title"]] = movie_details
+    #214
+    def add_genres(self, genres):
+        for genre in genres:
+            self.genre_preferences[genre] += 5
+        
+
 
 
 class RecommendationEngine:
@@ -202,10 +218,13 @@ class UserDB():
         self.users[user.userID] = user
     
     def verify_user(self, username, password):
+        print(f"verifying {username} with pass {password}")
+        print(self.users)
         user = self.users.get(username)
+        print(user)
         if user and user.password == password:
-            return True
-        return False
+            return (True, user)
+        return (False, None)
     
     def register_user(self, username, password):
         if self.is_username_used(username):
@@ -214,7 +233,7 @@ class UserDB():
         #self.users[new_user.userID] = new_user
         #self.used_usernames.add(username)
         self.users[username] = new_user
-        return True
+        return (True, new_user)
 
 maindb = UserDB()
 
@@ -241,11 +260,16 @@ def main():
     """
     A example of creating a user, searching for a movie and creating a review 
     """
-    testuser = User("beanlock", "brung")
+    #testdb = UserDB()
+    #testuser = User("beanlock", "brung", testuser)
     #topmovies = ia.get_top250_indian_movies()
     #print(topmovies)
     
-
+    with open('top_movies.pkl', 'rb') as f:
+            top_movies_list = pickle.load(f)
+    for movie in top_movies_list:
+        print(movie['genres'])
+    """
     movies = ia.search_movie("spiderverse")
     #print(movies[:3])
     movie = movies[0]
@@ -261,7 +285,7 @@ def main():
     #testreview = Review("123", "0133093", 5, "wow this movie is really cool")
     #print(testreview)
     #testreview.display_review()
-
+    """
 
 if __name__ == "__main__":
     main()

@@ -32,29 +32,6 @@ class MainFrame(Frame):
         )
         self.canvas.pack(fill='both', expand=True)
 
-        self.entry_image_1 = PhotoImage(
-            file=relative_to_assets("entry_1.png"))
-        self.entry_bg_1 = self.canvas.create_image(
-            960.0,
-            562.0,
-            image=self.entry_image_1
-        )
-        self.entry_1 = Entry(
-            master=self.canvas,
-            bd=0,
-            bg="#D9D9D9",
-            fg="#000716",
-            highlightthickness=0
-        )
-        self.entry_1.place(
-            x=680.0,
-            y=531.0,
-            width=560.0,
-            height=60.0
-        )
-
-        self.entry_1.insert(0,"Type to start your ReView journey")
-
         self.image_image_1 = PhotoImage(
             file=relative_to_assets("image_1.png"))
         self.image_1 = self.canvas.create_image(
@@ -72,12 +49,15 @@ class MainFrame(Frame):
             outline=""
         )
 
-        self.image_image_2 = PhotoImage(
-            file=relative_to_assets("image_2.png"))
+        print(f"{self.app_frames.current_user.profile+1}")
+
+        self.profile_image = Image.open(relative_to_assets(f"profile_{self.app_frames.current_user.profile}.png"))
+        self.resized_image = self.profile_image.resize((120,120))
+        self.tk_image = ImageTk.PhotoImage(self.resized_image)
         self.image_2 = self.canvas.create_image(
-            1856.0,
+            1980.0-120,
             60.0,
-            image=self.image_image_2
+            image=self.tk_image
         )
 
         self.button_1 = Button(
@@ -89,7 +69,7 @@ class MainFrame(Frame):
             activeforeground="#586c4c",
             highlightthickness=0,
             borderwidth=0.5,
-            command=lambda: self.display_recommendations(generate_recommended_movies()),
+            command=lambda: self.display_recommendations(self.generate_recommended_movies(self.app_frames.current_user)),
             relief="flat"
         )
         self.button_1.place(
@@ -98,7 +78,7 @@ class MainFrame(Frame):
             width=378.0,
             height=65.0
         )
-
+        print(str(self.app_frames.current_user))
         self.button_2 = Button(
             bg="#586c4c",
             fg="#FFFFFF",
@@ -119,10 +99,12 @@ class MainFrame(Frame):
         )
 
     def display_recommendations(self, recommended_movies):
+
         for widget in self.winfo_children():
             widget.destroy()
         num_columns = 4
         num_rows = (len(recommended_movies) + num_columns - 1) // num_columns
+
         for index, movie in enumerate(recommended_movies):
             title = movie.get('title', 'Unknown Title')
             cover_url = movie.get('full-size cover url', '')
@@ -134,31 +116,57 @@ class MainFrame(Frame):
             recommendation_frame.grid(row=row, column=column, padx=10, pady=10)
 
 
+            
             title_label = Label(recommendation_frame, text=title, font=("Helvetica", 12), fg="#ffffff", bg="#67805C")
             title_label.pack()
 
-
+            
             if cover_url:
+                
                 response = requests.get(cover_url)
                 image_data = response.content
 
+                
                 image = Image.open(BytesIO(image_data))
 
-                max_width = 200
-                max_height = 200
+                
+                max_width = 200  
+                max_height = 200  
+
                 image.thumbnail((max_width, max_height))
 
                 cover_image = ImageTk.PhotoImage(image)
 
+
+                
                 cover_label = Label(recommendation_frame, image=cover_image)
-                cover_label.image = cover_image
+                cover_label.image = cover_image 
                 cover_label.pack()
 
-        self.update_idletasks()
+
+
+        self.update_idletasks()  
+
+
+
+    def generate_recommended_movies(self, user):
+        engine = RecommendationEngine(user)
+        reclist = engine.recommend()
+        return reclist
+        
+
+    
+
+               
 
 userdb = UserDB()
 
-def generate_recommended_movies():
+def generate_recommended_movies(user):
+    engine = RecommendationEngine(user)
+    reclist = engine.recommend()
+    return reclist
+
+    """
     ia = Cinemagoer()
     demouser = User("4x", "99", userdb)
     testrecommender = RecommendationEngine(demouser)
@@ -173,3 +181,4 @@ def generate_recommended_movies():
     for movie in recommended_movies:
         print("Reccomended: " + str(movie))
     return recommended_movies
+    """
