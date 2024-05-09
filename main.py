@@ -99,16 +99,12 @@ class MainFrame(Frame):
         )
 
     def display_recommendations(self, recommended_movies):
-        if len(recommended_movies) == 0:
-            recommendation_frame = Frame(self, background="#67805C").pack()
-            print("scuffed pick a genre")
-            label = Label(recommendation_frame, text="Something went wrong. Please pick a genre.")
-            label.pack()
+
         for widget in self.winfo_children():
             widget.destroy()
         num_columns = 4
         num_rows = (len(recommended_movies) + num_columns - 1) // num_columns
-        
+
         for index, movie in enumerate(recommended_movies):
             title = movie.get('title', 'Unknown Title')
             cover_url = movie.get('full-size cover url', '')
@@ -118,6 +114,7 @@ class MainFrame(Frame):
 
             recommendation_frame = Frame(self, background="#67805C")
             recommendation_frame.grid(row=row, column=column, padx=10, pady=10)
+
 
             
             title_label = Label(recommendation_frame, text=title, font=("Helvetica", 12), fg="#ffffff", bg="#67805C")
@@ -135,9 +132,11 @@ class MainFrame(Frame):
                 
                 max_width = 200  
                 max_height = 200  
+
                 image.thumbnail((max_width, max_height))
 
                 cover_image = ImageTk.PhotoImage(image)
+
 
                 
                 cover_label = Label(recommendation_frame, image=cover_image)
@@ -149,43 +148,7 @@ class MainFrame(Frame):
         self.update_idletasks()  
 
 
-        """
-            
-            title_label = Label(self, text=title, font=("Koulen", 12))
-            title_label.grid(row=index, column=0, padx=10, pady=10)
 
-            
-            if cover_url:
-                # Fetch image from URL using requests
-                response = requests.get(cover_url)
-                image_data = response.content
-
-                # Open image using Pillow
-                image = Image.open(BytesIO(image_data))
-
-                
-                max_width = 200  # Adjust as needed
-                max_height = 200  # Adjust as needed
-                image.thumbnail((max_width, max_height))
-
-                
-                cover_image = ImageTk.PhotoImage(image)
-
-                
-                cover_label = Label(self, image=cover_image)
-                cover_label.image = cover_image  # To prevent garbage collection
-                cover_label.grid(row=index, column=col + 1, padx=10, pady=10)
-        
-        
-        back_button = Button(
-            self,
-            text="Back to Login",
-            command=lambda: self.app_frames.switch_frame(login.LoginFrame)
-        )
-        back_button.grid(row=len(recommended_movies), column=0, columnspan=2, pady=10)
-
-        self.update_idletasks()  # Ensure GUI updates immediately
-        """
     def generate_recommended_movies(self, user):
         engine = RecommendationEngine(user)
         reclist = engine.recommend()
@@ -193,6 +156,8 @@ class MainFrame(Frame):
         
 
     
+
+               
 
 userdb = UserDB()
 

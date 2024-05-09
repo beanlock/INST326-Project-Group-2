@@ -49,10 +49,11 @@ class AppFrames:
 
 
 if __name__ == "__main__":
-    #ia = Cinemagoer()
+
     root = Tk()
     app = AppFrames(root)
     root.mainloop()
+
     """
     testrecommender = RecommendationEngine(demouser)
     movies = ia.search_movie("madame web")
@@ -69,7 +70,5 @@ if __name__ == "__main__":
     """
     root = Tk()
     app = AppFrames(root)
-    app.register("4x", "99")
-    demouser = User("4x", "99", app.users)
-    
     """
+
