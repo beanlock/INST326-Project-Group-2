@@ -224,7 +224,7 @@ class UserDB():
         print(user)
         if user and user.password == password:
             return (True, user)
-        return False
+        return (False, None)
     
     def register_user(self, username, password):
         if self.is_username_used(username):
