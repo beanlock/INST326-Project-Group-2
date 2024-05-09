@@ -1,6 +1,7 @@
 import random
 from imdb import Cinemagoer
 import pickle
+import pytest
 
 
 class Review():
@@ -65,7 +66,7 @@ class User():
             self.friends = {}
             self.reviewcount = 0
             user_db.add_user(self)
-            #UserDB.users[self.userID] = self
+            user_db.users[self.userID] = self
             self.genre_preferences = {}
             print(f"{username} and {password} has been created")
 
@@ -94,6 +95,7 @@ class User():
                     self.genre_preferences[genre] += 1
                 else:
                     self.genre_preferences[genre] = 1
+        return reviewID
 
     def favorite_genres(self):
         """
@@ -196,12 +198,12 @@ class RecommendationEngine:
 #database of all users, keeps track of user objects and IDs
 class UserDB():
     """
-    Contains the database of usees with thei ID's and usernames that are all different in order to avoid confusion
+    Contains the database of users with their ID's and usernames that are all unique in order to avoid duplicates
 
     Attributes: 
-    used_ids (set): A set of all user ID's to prevent repatition 
-    used_usernames (set): A set of used usernames to prevent repatition
-    users (dict): A dictinoary of user objects, with the key bing userID
+    used_ids (set): A set of all user ID's to prevent repetition 
+    used_usernames (set): A set of used usernames to prevent repetition
+    users (dict): A dictionary of user objects, with the key being username
     """
     def __init__(self):
         self.used_ids = set()
@@ -227,13 +229,14 @@ class UserDB():
         self.used_ids.add(userID)
     
     def add_user(self, user):
-        self.users[user.userID] = user
-    
+        self.users[user.username] = user
+        self.add_user_id(user.userID)
+
     def verify_user(self, username, password):
         print(f"verifying {username} with pass {password}")
         print(self.users)
         user = self.users.get(username)
-        print(user)
+        print("user is supposed to be HEY LOOK HERE:" + str(user))
         if user and user.password == password:
             return (True, user)
         return (False, None)
@@ -258,7 +261,7 @@ def generate_userID(db):
     db (UserDB): The User database instance to check for existing ID's
 
     Returns:
-    str: A unuque userID
+    str: A unique userID
     """
     while True:
         user_id = str(random.randint(0, 9999))
@@ -273,7 +276,6 @@ def main():
     A example of creating a user, searching for a movie and creating a review 
     """
     #testdb = UserDB()
-    #testuser = User("beanlock", "brung", testuser)
     #topmovies = ia.get_top250_indian_movies()
     #print(topmovies)
     
@@ -299,6 +301,61 @@ def main():
     #testreview.display_review()
     """
 
+
+def test_Review():
+    testdb = UserDB()
+    assert testdb.users == {}
+    assert testdb.used_ids == set()
+    assert testdb.used_usernames == set()
+
+    testuser = User("beanlock", "brung", testdb)
+    print(testdb.used_ids)
+    assert testuser.userID in testdb.used_ids
+    assert testuser.username == 'beanlock'
+    assert testuser.password == 'brung'
+    assert testuser.reviews == {}
+    movies = ia.search_movie("spiderverse")
+    #print(movies[:3])
+    movie = movies[0]
+    ia.update(movie)
+    #print(movie.infoset2keys)
+    movieID = movie["imdbID"]
+    reviewID = testuser.create_review(movieID, 9, "this movie was really cool and good i liked it a lot")
+    print(testuser.genre_preferences)
+    assert testuser.genre_preferences == {'Animation': 1, 'Action': 1, 'Adventure': 1, 'Fantasy': 1, 'Sci-Fi': 1}
+    assert testuser.reviews[reviewID].ownerID in testdb.used_ids
+    assert testuser.reviews[reviewID].movieID == movieID
+    assert testuser.reviews[reviewID].rating == 9
+    #testuser.display_all_reviews()
+    testRecommender = RecommendationEngine(testuser)
+    recommended_movies = testRecommender.recommend()
+    movietitles = []
+    for movie in recommended_movies:
+        movietitles.append(movie['title'])
+    
+    assert movietitles == ['The Dark Knight', 
+                           'The Lord of the Rings: The Return of the King', 
+                           'The Lord of the Rings: The Fellowship of the Ring', 
+                           'The Good, the Bad and the Ugly', 
+                           'The Lord of the Rings: The Two Towers', 
+                           'Inception', 
+                           'Star Wars: Episode V - The Empire Strikes Back', 
+                           'The Matrix', 
+                           'Interstellar', 
+                           'Dune: Part Two']    
+    
+    login_attempt = testdb.verify_user('beanlock', 'brung')
+    print(login_attempt)
+    assert login_attempt == (True, testuser)
+    register_attempt = testdb.register_user('deadshotguy', 'officerboles')
+    print(register_attempt)
+    assert register_attempt == (True, testdb.users.get('deadshotguy'))
+    #testreview = Review("123", "0133093", 5, "wow this movie is really cool")
+    #testreview.display_review()
+    
+
 if __name__ == "__main__":
+    test_Review()
     main()
+    
 
