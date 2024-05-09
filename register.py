@@ -261,10 +261,21 @@ class Register(Frame):
     def register_user(self):
         username = self.entry_1.get()
         password = self.entry_2.get()
+
+
         success, user = self.app_frames.users.register_user(username, password)
         self.app_frames.current_user = user
         if success:
             print("Registration Successful Successful")
+
+            i = 1
+            for button in self.button_states.values():
+                if not button:
+                    i+= 1
+                else:
+                    print(f"User profile set to #{i}")
+                    user.profile=i
+
             self.app_frames.switch_frame(login.LoginFrame)
         else:
             self.canvas.itemconfig(
